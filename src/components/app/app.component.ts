@@ -8,11 +8,12 @@ import '../../../public/css/styles.css';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit, OnInit {
   _selector: string = '[data-qimager-elem="image"]';
   constructor() {
 
   }
+  ngOnInit() {}
   ngAfterViewInit() {
     let img = document.querySelectorAll(this._selector)[0];
     img.onload = () => {
