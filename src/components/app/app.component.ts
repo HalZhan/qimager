@@ -3,6 +3,9 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import 'AlloyImage';
 import '../../../public/css/styles.css';
 
+/**
+ * 
+ */
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
