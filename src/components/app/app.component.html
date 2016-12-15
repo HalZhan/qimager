@@ -2,11 +2,12 @@
   <h1>QImager</h1>
   <img data-qimager-elem="image" src="../../../public/images/001.jpg" alt="">
   <div>
-    <button (click)="deal()">原图</button>
+    <button (click)="deal('原图')">原图</button>
     <button (click)="deal('灰度处理')">灰度</button>
     <button (click)="deal('高斯模糊')">高斯模糊</button>
     <button (click)="deal('锐化')">锐化</button>
     <button (click)="deal('反色')">反色</button>
     <button (click)="deal('浮雕效果')">浮雕效果</button>
+    <button (click)="undo()">撤销</button>
   </div>
 </main>

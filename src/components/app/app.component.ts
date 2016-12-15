@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import 'AlloyImage';
+import Imager from '../../imager';
 import '../../../public/css/styles.css';
 
 @Component({
@@ -9,27 +9,28 @@ import '../../../public/css/styles.css';
 })
 export class AppComponent implements AfterViewInit, OnInit {
   _selector: string = '[data-qimager-elem="image"]';
+  _imager: Imager = null;
   constructor() {
 
   }
-  ngOnInit() {}
-  ngAfterViewInit() {
-    let img = document.querySelectorAll(this._selector)[0];
+  ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    let img: any = document.querySelector(this._selector);
     img.onload = () => {
-      this.alloyImage = AlloyImage(img);
+      this._imager = new Imager({img});
+      this._imager.init();
     };
   }
-  deal(way) {
-    let el = document.querySelectorAll(this._selector)[0];
-    console.info(el);
-    if (el && this.alloyImage) {
-      let image = this.alloyImage.clone();
+  deal(way: string = ''): void {
+    if (this._imager) {
       if(way) {
-        image.act(way).replace(el);
+        this._imager.dealImg({effect: way});
       }
-      else {
-        image.replace(el);
-      }
+    }
+  }
+  undo():void {
+    if(this._imager) {
+      this._imager.undo();
     }
   }
 }
