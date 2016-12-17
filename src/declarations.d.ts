@@ -13,3 +13,6 @@
 */
 declare module '*';
 declare function $AI(args: any): any;
+declare interface HTMLElement extends HTMLElement {
+  loadOnce(args: any): void;
+}

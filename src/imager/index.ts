@@ -51,7 +51,9 @@ class Imager {
     _initLayer(): void {
         let img: HTMLElement = this._doms['img'] || null;
         if (img) {
-            this._layer = $AI(img);
+            img.loadOnce(() => {
+                this._layer = $AI(img);
+            });
         }
     }
 
@@ -62,20 +64,41 @@ class Imager {
      * 
      * @memberOf Imager
      */
-    dealImg(opt: Object = {}): void {
+    act(opt: Object = {}): void {
         let effect: string = opt['effect'] || '';
         effect = this._getValidEffect(effect)
         if (this._getValidEffect(effect) && this._layer) {
+            let img = this._doms['img'];
             switch (effect) {
                 case 'origin':
                     this.displayOrigin();
                     break;
                 default:
                     this._addCount();
-                    this._layer.view(effect).show();
+                    this._layer.view(effect).replace(img);
                     this._layer.doView();
                     this._hasDoView = true;
                     break;
+            }
+        }
+    }
+
+    /**
+     * PS效果
+     * 
+     * @param {Object} [opt={}]
+     * 
+     * @memberOf Imager
+     */
+    ps(opt: Object = {}): void {
+        let effect: string = opt['effect'] || '';
+        let img = this._doms['img'];
+        if(this._layer && img) {
+            if(effect === '原图') {
+                this._layer.clone().replace(img);
+            }
+            else {
+                this._layer.clone().ps(effect).replace(img);
             }
         }
     }
@@ -123,8 +146,9 @@ class Imager {
      */
     undo(): void {
         if (this._layer) {
-            if (this._hasDoView) {
-                this._layer.undoView().show();
+            let img = this._doms['img'];
+            if (this._hasDoView && img) {
+                this._layer.undoView().replace(img);
                 this._hasDoView = false;
             }
 
