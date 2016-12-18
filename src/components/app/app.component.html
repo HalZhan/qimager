@@ -1,101 +1,47 @@
 <div class="header">
+  <input type="file" style="display:none;" data-qimager-elem="imageInput" (change)="imageChange($event)">
   <div class="logo">在线图片编辑器</div>
   <div class="function-btns">
-    <a class="fun-btn open" href=""><i class="iconfont icon-open"></i>打开图片</a>
-    <a class="fun-btn cut" href=""><i class="iconfont icon-cut"></i>剪裁</a>
-    <a class="fun-btn cancel" href=""><i class="iconfont icon-cancel2"></i>撤销</a>
-    <a class="fun-btn redo" href=""><i class="iconfont icon-redo"></i>重做</a>
-    <a class="fun-btn yuantu" href=""><i class="iconfont icon-yuantu"></i>原图</a>
-    <a class="fun-btn compare" href=""><i class="iconfont icon-compare"></i>对比</a>
-    <a class="fun-btn saveEffect" href=""><i class="iconfont icon-saveEffect"></i>保存效果</a>
-    <a class="fun-btn save" href=""><i class="iconfont icon-save"></i>保存</a>
+    <a (click)="openFile()" class="fun-btn open" href="javascript:;"><i class="iconfont icon-open"></i>打开图片</a>
+    <a class="fun-btn cut" href="javascript:;"><i class="iconfont icon-cut"></i>剪裁</a>
+    <a class="fun-btn cancel" href="javascript:;"><i class="iconfont icon-cancel2"></i>撤销</a>
+    <a class="fun-btn redo" href="javascript:;"><i class="iconfont icon-redo"></i>重做</a>
+    <a class="fun-btn yuantu" href="javascript:;"><i class="iconfont icon-yuantu"></i>原图</a>
+    <a class="fun-btn compare" href="javascript:;"><i class="iconfont icon-compare"></i>对比</a>
+    <a class="fun-btn saveEffect" href="javascript:;"><i class="iconfont icon-saveEffect"></i>保存效果</a>
+    <a (click)="saveFile()" class="fun-btn save" href="javascript:;"><i class="iconfont icon-save"></i>保存</a>
   </div>
 </div>
 <div class="wrapper">
   <div class="left" style="height: 100%;">
     <h3>效果</h3>
     <ul id="effects" class="effects">
-      <li class="e_item" (click)="ps('原图')">
+      <li *ngFor="let obj of PS_PICTURE_NAMES" class="e_item" (click)="ps(obj.effect)" >
         <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e1.jpg" alt="">原图</div>
-      </li>
-      <li class="e_item" (click)="ps('美肤')">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e1.png" alt="">美肤效果</div>
-      </li>
-      <li class="e_item" (click)="ps('素描')">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e2.png" alt="">素描效果</div>
-      </li>
-      <li class="e_item" (click)="ps('自然增强')">
-        <div class="imgWrapper">
-        <img src="../../../public/slicing/images/e3.png" alt="">自然增强</div>
-      </li>
-      <li class="e_item" (click)="ps('紫调')">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e4.png" alt="">紫调效果</div>
-      </li>
-      <li class="e_item" (click)="ps('柔焦')">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e5.png" alt="">柔焦效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e6.png" alt="">复古效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e7.png" alt="">黑白效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e8.png" alt="">仿lomo</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e9.png" alt="">亮白增强</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e10.png" alt="">灰白效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e11.png" alt="">灰色效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e12.png" alt="">暖秋效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e13.png" alt="">木雕效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="../../../public/slicing/images/e14.png" alt="">粗糙效果</div>
+          <img src="{{'../../../public/slicing/images/'+obj.pic+'.png'}}" alt="">{{obj.effect}}
+        </div>
       </li>
     </ul>
   </div>
   <div class="right">
     <div class="picWrapper ">
-        <a class="small-yuantu" href="javascript:;">
-          <span class="yuantu-text">原图</span>
-          <img src="../../../public/slicing/images/stop.jpg" alt="" draggable="false" >
-        </a>
-        <img data-qimager-elem="image" src="../../../public/slicing/images/stop.jpg" alt="" draggable="false" >
-        <div class="infoMsg dn">处理中</div>
+      <a class="small-yuantu" href="javascript:;">
+        <span class="yuantu-text">原图</span>
+        <img src="../../../public/slicing/images/stop.jpg" alt="" draggable="false">
+      </a>
+      <img data-qimager-elem="image" src="" alt="" draggable="false">
+      <div data-qimager-elem="loadingWrap" class="infoMsg dn">处理中</div>
     </div>
     <div class="picCompare dn">
-        <div class="yuantu">
-          <p>原图：</p>
-          <img class="yuantu" src="../../../public/slicing/images/stop.jpg" alt="" draggable="false" >
-        </div>
-        <div class="effect">
-          <p>效果图：</p>
-          <img class="effect" src="../../../public/slicing/images/stop.jpg" alt="" draggable="false">
-        </div>
+      <div class="yuantu">
+        <p>原图：</p>
+        <img class="yuantu" src="../../../public/slicing/images/stop.jpg" alt="" draggable="false">
+      </div>
+      <div class="effect">
+        <p>效果图：</p>
+        <img class="effect" src="../../../public/slicing/images/stop.jpg" alt="" draggable="false">
+      </div>
     </div>
-    
-  </div>	
+
+  </div>
 </div>

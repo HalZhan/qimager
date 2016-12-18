@@ -2,7 +2,20 @@
 
 import 'AlloyImage';
 
-const EFFECTS: Object = {
+/**
+ * 状态值
+ */
+export const STATUS = {
+    SUCESS: 0,  // 成功
+    FAIL: -1,   // 失败
+    ERROR: -2,  // 错误
+    UNKNOWN: -9 // 未知
+};
+
+/**
+ * 高级效果
+ */
+export const EFFECTS_ACT: Object = {
     brightness: '亮度',
     setHSI: '色相/饱和度调节',
     curve: '曲线',
@@ -20,9 +33,45 @@ const EFFECTS: Object = {
     origin: '原图'
 };
 
-class Imager {
+/**
+ * PS效果
+ */
+export const EFFECTS_PS: Object = {
+    origin: '原图',
+    softenFace: '美肤',
+    sketch: '素描',
+    softEnhancement: '自然增强',
+    purpleStyle: '紫调',
+    soften: '柔焦',
+    vintage: '复古',
+    gray: '黑白',
+    lomo: '仿lomo',
+    strongEnhancement: '亮白增强',
+    strongGray: '灰白',
+    lightGray: '灰色',
+    warmAutumn: '暖秋',
+    carveStyle: '木雕',
+    rough: '粗糙'
+};
+
+/**
+ * 原图 - 效果名
+ */
+export const EFFECT_ORIGIN: string = 'origin';
+
+const SELECTORS = {
+    SAVE_IFRAME: '__IMAGER_IFRMAE__'
+};
+
+/**
+ * Imager类
+ * 
+ * @export
+ * @class Imager
+ */
+export class Imager {
     _doms: Object = {
-        img: HTMLElement
+        img: HTMLImageElement
     };
     _layer: any = null;
     _count: number = 0;
@@ -48,13 +97,43 @@ class Imager {
      * 
      * @memberOf Imager
      */
-    _initLayer(): void {
-        let img: HTMLElement = this._doms['img'] || null;
-        if (img) {
-            img.loadOnce(() => {
-                this._layer = $AI(img);
-            });
-        }
+    _initLayer(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let img: HTMLImageElement = this._doms['img'] || null;
+            if (img) {
+                img.loadOnce(() => {
+                    this._layer = $AI(img);
+                    try {
+                        resolve({
+                            status: STATUS.SUCESS
+                        });
+                    }
+                    catch (err) {
+                        resolve({
+                            status: STATUS.ERROR,
+                            data: err
+                        });
+                    }
+                });
+            }
+            else {
+                resolve({
+                    status: STATUS.FAIL,
+                    msg: 'Lack of image document object model!'
+                });
+            }
+        });
+    }
+
+    /**
+     * 重置
+     * 
+     * @returns {Promise<any>}
+     * 
+     * @memberOf Imager
+     */
+    reset(): Promise<any> {
+        return this._initLayer();
     }
 
     /**
@@ -66,8 +145,8 @@ class Imager {
      */
     act(opt: Object = {}): void {
         let effect: string = opt['effect'] || '';
-        effect = this._getValidEffect(effect)
-        if (this._getValidEffect(effect) && this._layer) {
+        effect = this.getValidActEffect(effect)
+        if (this.getValidActEffect(effect) && this._layer) {
             let img = this._doms['img'];
             switch (effect) {
                 case 'origin':
@@ -84,23 +163,68 @@ class Imager {
     }
 
     /**
+     * 获得正确的PS效果
+     * 
+     * @param {string} [effect='']
+     * 
+     * @memberOf Imager
+     */
+    getValidPSEffect(effect: string = ''): string {
+        if (effect) {
+            for (let k in EFFECTS_PS) {
+                if (k === effect || EFFECTS_PS[k] === effect) {
+                    return k;
+                }
+            }
+        }
+        else {
+            return '';
+        }
+    }
+
+    /**
      * PS效果
      * 
      * @param {Object} [opt={}]
      * 
      * @memberOf Imager
      */
-    ps(opt: Object = {}): void {
-        let effect: string = opt['effect'] || '';
-        let img = this._doms['img'];
-        if(this._layer && img) {
-            if(effect === '原图') {
-                this._layer.clone().replace(img);
+    ps(opt: Object = {}): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let effect: string = opt['effect'] || '';
+            effect = this.getValidPSEffect(effect);
+            let img = this._doms['img'];
+            if (this._layer && img && effect) {
+                try {
+                    if (effect === EFFECT_ORIGIN) {
+                        this._layer.clone().replace(img).complete(() => {
+                            resolve({
+                                status: STATUS.SUCESS
+                            });
+                        });
+                    }
+                    else {
+                        this._layer.clone().ps(effect).replace(img).complete(() => {
+                            resolve({
+                                status: STATUS.SUCESS
+                            });
+                        });
+                    }
+                }
+                catch (err) {
+                    resolve({
+                        status: STATUS.ERROR,
+                        data: err
+                    });
+                }
             }
             else {
-                this._layer.clone().ps(effect).replace(img);
+                resolve({
+                    status: STATUS.FAIL,
+                    msg: 'Lacked params!'
+                });
             }
-        }
+        });
     }
 
     /**
@@ -158,17 +282,17 @@ class Imager {
     }
 
     /**
-     * 获得正确效果
+     * 获得正确高级效果
      * 
      * @param {string} [effect='']
      * @returns {string}
      * 
      * @memberOf Imager
      */
-    _getValidEffect(effect: string = ''): string {
+    getValidActEffect(effect: string = ''): string {
         if (effect) {
-            for (let k in EFFECTS) {
-                if (effect === k || effect === EFFECTS[k]) {
+            for (let k in EFFECTS_ACT) {
+                if (effect === k || effect === EFFECTS_ACT[k]) {
                     return k;
                 }
             }
@@ -187,8 +311,8 @@ class Imager {
      * @memberOf Imager
      */
     clip(x0: number, y0: number, width: number, height: number): void {
-        if(this._layer) {
-            
+        if (this._layer) {
+
         }
     }
 
@@ -200,7 +324,7 @@ class Imager {
      * @memberOf Imager
      */
     rotate(degree: number): void {
-        if(this._layer) {}
+        if (this._layer) { }
     }
 
     /**
@@ -212,7 +336,7 @@ class Imager {
      * @memberOf Imager
      */
     scale(xRatio: number, yRatio: number): void {
-        if(this._layer) {}
+        if (this._layer) { }
     }
 
     /**
@@ -223,8 +347,55 @@ class Imager {
      * @memberOf Imager
      */
     transform(matrix: Array<number>): void {
-        if(this._layer) {}
+        if (this._layer) { }
+    }
+
+    /**
+     * 打开图像文件
+     * 
+     * @param {*} [fileUrl=null]
+     * 
+     * @memberOf Imager
+     */
+    loadImageFile(fileUrl: any = null): Promise<any> {
+        let reader = new FileReader();
+        let self = this;
+        return new Promise((resolve, reject) => {
+            reader.readAsDataURL(fileUrl);
+            reader.onload = function () {
+                let img: HTMLImageElement = self._doms['img'];
+                img.src = this.result;
+                resolve({
+                    status: STATUS.SUCESS
+                });
+            };
+        });
+    }
+
+    /**
+     * 保存图像文件
+     * 
+     * @returns {Promise<any>}
+     * 
+     * @memberOf Imager
+     */
+    saveImageFile(): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let iframe: HTMLIFrameElement = <HTMLIFrameElement>window.frames[SELECTORS.SAVE_IFRAME];
+            if (!iframe) {
+                iframe = <HTMLIFrameElement>document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.id = SELECTORS.SAVE_IFRAME;
+                iframe.name = SELECTORS.SAVE_IFRAME;
+                // let script = <HTMLScriptElement>document.createElement('script');
+                // script.innerText = `document.domain=${location.host}`;
+                // iframe.contentWindow.document.body.appendChild(script);
+                document.querySelector('body').appendChild(iframe);
+            }
+            iframe.onload = () => {
+                window.frames[SELECTORS.SAVE_IFRAME].document.execCommand('saveAs');
+            };
+            iframe.src = this._layer.save();
+        });
     }
 }
-
-export default Imager;
