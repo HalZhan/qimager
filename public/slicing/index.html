@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-	<title>QEditor - 在线图片编辑器</title>
+  <title>爱奇艺 - 在线图片编辑器</title>
   <link media="all" rel="stylesheet" href="images/main.css" type="text/css">
   <link media="all" rel="stylesheet" href="images/bar.style.css" type="text/css">
 </head>
@@ -20,71 +20,173 @@
   </div>
 </div>
 <div class="wrapper">
-  <div class="left" style="height: 100%;">
-    <h3>效果</h3>
-    <ul id="effects" class="effects">
-      <li class="e_item">
-        <div class="imgWrapper">
-
-          <img src="images/e1.jpg" alt="">原图</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e1.png" alt="">美肤效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e2.png" alt="">素描效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-        <img src="images/e3.png" alt="">自然增强</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e4.png" alt="">紫调效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e5.png" alt="">柔焦效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e6.png" alt="">复古效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e7.png" alt="">黑白效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e8.png" alt="">仿lomo</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e9.png" alt="">亮白增强</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e10.png" alt="">灰白效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e11.png" alt="">灰色效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e12.png" alt="">暖秋效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e13.png" alt="">木雕效果</div>
-      </li>
-      <li class="e_item">
-        <div class="imgWrapper">
-          <img src="images/e14.png" alt="">粗糙效果</div>
-      </li>
-    </ul>
+  <div class="left" >
+    <div class="tab">
+      <ul>
+        <li>效果</li>
+        <li class="selected">高级效果</li>
+      </ul>
+    </div>
+    <div class="effects-box dn">
+      <ul id="effects" class="effects">
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e1.jpg" alt="">原图</div>
+          <div class="function-items">
+            <div class="function-item">
+              <div class="item-tit">亮度
+                <input class="item-input" type="text" value="0" />
+              </div>
+              <div class="bar-box">
+                <div class="bar-progress"></div>
+                <div class="bar-num"></div>
+              </div>
+            </div>
+            <div class="function-item">
+              <div class="item-tit">对比度
+                <input class="item-input" type="text" value="0" />
+              </div>
+              <div class="bar-box">
+                <div class="bar-progress"></div>
+                <div class="bar-num"></div>
+              </div>
+            </div>
+            <div class="function-item">
+              <div class="item-tit">色彩饱和度
+                <input class="item-input" type="text" value="0" />
+              </div>
+              <div class="bar-box">
+                <div class="bar-progress"></div>
+                <div class="bar-num"></div>
+              </div>
+            </div>
+            <div class="function-item">
+              <div class="item-tit">清晰度
+                <input class="item-input" type="text" value="0" />
+              </div>
+              <div class="bar-box">
+                <div class="bar-progress"></div>
+                <div class="bar-num"></div>
+              </div>
+            </div>
+            <div class="bar-btns">
+              <a href="javascript:;" class="bar-btn">确定</a>
+              <a href="javascript:;" class="bar-btn">取消</a>
+            </div>
+          </div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e1.png" alt="">美肤效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e2.png" alt="">素描效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+          <img src="images/e3.png" alt="">自然增强</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e4.png" alt="">紫调效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e5.png" alt="">柔焦效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e6.png" alt="">复古效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e7.png" alt="">黑白效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e8.png" alt="">仿lomo</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e9.png" alt="">亮白增强</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e10.png" alt="">灰白效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e11.png" alt="">灰色效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e12.png" alt="">暖秋效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e13.png" alt="">木雕效果</div>
+        </li>
+        <li class="e_item">
+          <div class="imgWrapper">
+            <img src="images/e14.png" alt="">粗糙效果</div>
+        </li>
+      </ul>
+    </div>
+    <!--高级效果 start-->
+    <div class="advanced-effects">
+      <ul class="advanced-effects-con">
+        <li class="e_item">
+          <div class="adv-title selected">基础调整</div>
+          <div class="function-items ">
+            <div class="function-item">
+              <div class="item-tit">亮度/对比度
+                <input class="item-input" type="text" value="0" />
+              </div>
+              <div class="bar-box">
+                <div class="bar-progress"></div>
+                <div class="bar-num"></div>
+              </div>
+            </div>
+            <div class="function-item">
+              <div class="item-tit">色相/饱和度调节
+                <input class="item-input" type="text" value="0" />
+              </div>
+              <div class="bar-box">
+                <div class="bar-progress"></div>
+                <div class="bar-num"></div>
+              </div>
+            </div>
+            <div class="bar-btns">
+              <a href="javascript:;" class="bar-btn">确定</a>
+              <a href="javascript:;" class="bar-btn">取消</a>
+            </div>
+          </div>
+        </li>
+        <li class="e_item">
+          <div class="adv-title ">曲线</div>
+        </li>
+        <li class="e_item">
+          <div class="adv-title">灰度阈值</div>
+        </li>
+        <li class="e_item">
+          <div class="adv-title">高斯模糊</div>
+        </li>
+        <li class="e_item">
+          <div class="adv-title">锐化</div>
+        </li>
+        <li class="e_item">
+          <div class="adv-title">马赛克</div>
+        </li>
+        <li class="e_item">
+          <div class="adv-title">添加杂色</div>
+        </li>
+        <li class="e_item">
+          <div class="adv-title">暗角</div>
+        </li>
+      </ul>
+    </div>
+    <!--高级效果 end-->
   </div>
   <div class="right">
     <div class="picWrapper ">
@@ -106,7 +208,7 @@
         </div>
     </div>
     
-  </div>	
+  </div>  
 </div>
 </body>
 </html>
