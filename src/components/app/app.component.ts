@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Imager, STATUS } from '../../imager';
+import { Imager, STATUS, EFFECT_CATEGORIES } from '../../imager';
 // import '../../../public/css/styles.css';
 
 /**
@@ -16,6 +16,11 @@ const SELECTORS = {
  */
 const CLASSES = {
   HIDE: 'dn'
+};
+
+const MESSAGES = {
+  SAVE: '图像生成成功！请右键另存为...',
+  PLEASE_OPEN: '请先打开一张图片！'
 };
 
 @Component({
@@ -44,6 +49,10 @@ export class AppComponent implements AfterViewInit, OnInit {
   ];
 
   _imager: Imager = null;
+  imageEffectUrl: string = '';
+  imageOriginUrl: string = '';
+  showFlag: boolean = false;
+  effectCategory: number = 0;
   constructor() {
 
   }
@@ -72,8 +81,14 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
   }
   saveFile(): void {
-    if(this._imager) {
-      this._imager.saveImageFile();
+    if (this._imager) {
+      // this._imager.saveImageFile();
+      if (this.imageEffectUrl) {
+        alert(MESSAGES.SAVE);
+      }
+      else {
+        alert(MESSAGES.PLEASE_OPEN);
+      }
     }
   }
   imageChange(event: any): void {
@@ -87,17 +102,24 @@ export class AppComponent implements AfterViewInit, OnInit {
             }
           })
           .then(data => {
+            if (data.status === STATUS.SUCESS) {
+              this.imageEffectUrl = this.imageOriginUrl = data.data.dataUrl;
+              this.showFlag = true;
+            }
             this._loadingHide();
           })
       }, 100);
     }
   }
   ps(effect: string = ''): void {
-    if (this._imager && effect) {
+    if (this._imager && effect && this.showFlag) {
       this._loadingShow();
       // 必须为异步，否则loading弹层无法正常显示
       setTimeout(() => {
         this._imager.ps({ effect }).then(data => {
+          if (data.status === STATUS.SUCESS) {
+            this.imageEffectUrl = data.data.dataUrl;
+          }
           this._loadingHide();
         });
       }, 100);
@@ -109,8 +131,27 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
   }
   undo(): void {
-    if (this._imager) {
-      this._imager.undo();
+    if (this._imager && this.showFlag) {
+      this._imager.undo({
+        effectCategory: this.effectCategory
+      })
+        .then(data => {
+          if (data.status === STATUS.SUCESS) {
+            this.imageEffectUrl = data.data.dataUrl;
+          }
+        });
+    }
+  }
+  redo(): void {
+    if (this._imager && this.showFlag) {
+      this._imager.redo({
+        effectCategory: this.effectCategory
+      })
+        .then(data => {
+          if (data.status === STATUS.SUCESS) {
+            this.imageEffectUrl = data.data.dataUrl;
+          }
+        });
     }
   }
 }

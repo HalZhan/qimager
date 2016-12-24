@@ -1,14 +1,15 @@
 <div class="header">
   <input type="file" style="display:none;" data-qimager-elem="imageInput" (change)="imageChange($event)">
+  <img data-qimager-elem="image" src="" alt="" draggable="false" style="display:none;">
   <div class="logo">在线图片编辑器</div>
   <div class="function-btns">
     <a (click)="openFile()" class="fun-btn open" href="javascript:;"><i class="iconfont icon-open"></i>打开图片</a>
     <a class="fun-btn cut" href="javascript:;"><i class="iconfont icon-cut"></i>剪裁</a>
-    <a class="fun-btn cancel" href="javascript:;"><i class="iconfont icon-cancel2"></i>撤销</a>
-    <a class="fun-btn redo" href="javascript:;"><i class="iconfont icon-redo"></i>重做</a>
-    <a class="fun-btn yuantu" href="javascript:;"><i class="iconfont icon-yuantu"></i>原图</a>
+    <a (click)="undo()" class="fun-btn cancel" href="javascript:;"><i class="iconfont icon-cancel2"></i>撤销</a>
+    <a (click)="redo()" class="fun-btn redo" href="javascript:;"><i class="iconfont icon-redo"></i>重做</a>
+    <!--<a class="fun-btn yuantu" href="javascript:;"><i class="iconfont icon-yuantu"></i>原图</a>-->
     <a class="fun-btn compare" href="javascript:;"><i class="iconfont icon-compare"></i>对比</a>
-    <a class="fun-btn saveEffect" href="javascript:;"><i class="iconfont icon-saveEffect"></i>保存效果</a>
+    <!--<a class="fun-btn saveEffect" href="javascript:;"><i class="iconfont icon-saveEffect"></i>保存效果</a>-->
     <a (click)="saveFile()" class="fun-btn save" href="javascript:;"><i class="iconfont icon-save"></i>保存</a>
   </div>
 </div>
@@ -25,21 +26,21 @@
   </div>
   <div class="right">
     <div class="picWrapper ">
-      <a class="small-yuantu" href="javascript:;">
+      <a class="small-yuantu" href="javascript:;" *ngIf="showFlag">
         <span class="yuantu-text">原图</span>
-        <img src="../../../public/slicing/images/stop.jpg" alt="" draggable="false">
+        <img src="{{imageOriginUrl}}" alt="" draggable="false" >
       </a>
-      <img data-qimager-elem="image" src="" alt="" draggable="false">
+      <img src="{{imageEffectUrl}}" alt="" draggable="false" *ngIf="showFlag">
       <div data-qimager-elem="loadingWrap" class="infoMsg dn">处理中</div>
     </div>
     <div class="picCompare dn">
       <div class="yuantu">
         <p>原图：</p>
-        <img class="yuantu" src="../../../public/slicing/images/stop.jpg" alt="" draggable="false">
+        <img class="yuantu" src="{{imageOriginUrl}}" alt="" draggable="false">
       </div>
       <div class="effect">
         <p>效果图：</p>
-        <img class="effect" src="../../../public/slicing/images/stop.jpg" alt="" draggable="false">
+        <img class="effect" src="{{imageEffectUrl}}" alt="" draggable="false">
       </div>
     </div>
 

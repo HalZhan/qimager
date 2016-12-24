@@ -1,6 +1,7 @@
 /// <reference path="../declarations.d.ts" />
 
 import 'AlloyImage';
+import { Stack, FLAGS_STACK } from './stack';
 
 /**
  * 状态值
@@ -13,9 +14,17 @@ export const STATUS = {
 };
 
 /**
+ * 效果类别
+ */
+export const EFFECT_CATEGORIES = {
+    PS: 0,
+    ACT: 1
+};
+
+/**
  * 高级效果
  */
-export const EFFECTS_ACT: Object = {
+export const EFFECTS_ACT = {
     brightness: '亮度',
     setHSI: '色相/饱和度调节',
     curve: '曲线',
@@ -36,7 +45,7 @@ export const EFFECTS_ACT: Object = {
 /**
  * PS效果
  */
-export const EFFECTS_PS: Object = {
+export const EFFECTS_PS = {
     origin: '原图',
     softenFace: '美肤',
     sketch: '素描',
@@ -63,6 +72,9 @@ const SELECTORS = {
     SAVE_IFRAME: '__IMAGER_IFRMAE__'
 };
 
+const FLAG_UNDO = 0; // 撤销标识
+const FLAG_REDO = 1; // 重做标识
+
 /**
  * Imager类
  * 
@@ -76,9 +88,14 @@ export class Imager {
     _layer: any = null;
     _count: number = 0;
     _hasDoView: boolean = false;
+    _psStack: Stack = null;
+    _actStack: Stack = null;
+    _curPSEffect: string = '';
 
     constructor(opt: Object = {}) {
         this._doms['img'] = opt['img'];
+        this._psStack = new Stack();
+        this._actStack = new Stack();
     }
 
     /**
@@ -102,10 +119,13 @@ export class Imager {
             let img: HTMLImageElement = this._doms['img'] || null;
             if (img) {
                 img.loadOnce(() => {
-                    this._layer = $AI(img);
                     try {
+                        this._layer = $AI(img);
                         resolve({
-                            status: STATUS.SUCESS
+                            status: STATUS.SUCESS,
+                            data: {
+                                dataUrl: img.src
+                            }
                         });
                     }
                     catch (err) {
@@ -133,7 +153,17 @@ export class Imager {
      * @memberOf Imager
      */
     reset(): Promise<any> {
-        return this._initLayer();
+        return this._initLayer()
+            .then(data => {
+                if (data.status === STATUS.SUCESS) {
+                    this._actStack.reset();
+                    this._psStack.reset();
+                    this._psStack.push({
+                        effect: EFFECT_ORIGIN
+                    });
+                }
+                return data;
+            });
     }
 
     /**
@@ -145,7 +175,7 @@ export class Imager {
      */
     act(opt: Object = {}): void {
         let effect: string = opt['effect'] || '';
-        effect = this.getValidActEffect(effect)
+        effect = this.getValidActEffect(effect);
         if (this.getValidActEffect(effect) && this._layer) {
             let img = this._doms['img'];
             switch (effect) {
@@ -193,22 +223,40 @@ export class Imager {
         return new Promise((resolve, reject) => {
             let effect: string = opt['effect'] || '';
             effect = this.getValidPSEffect(effect);
-            let img = this._doms['img'];
+            let img: HTMLImageElement = this._doms['img'];
             if (this._layer && img && effect) {
                 try {
-                    if (effect === EFFECT_ORIGIN) {
+                    if(this._curPSEffect && this._curPSEffect === effect) {
+                        resolve({
+                            status: STATUS.SUCESS,
+                            data: {
+                                dataUrl: img.src
+                            }
+                        });
+                    }
+                    else if (effect === EFFECT_ORIGIN) {
                         this._layer.clone().replace(img).complete(() => {
                             resolve({
-                                status: STATUS.SUCESS
+                                status: STATUS.SUCESS,
+                                data: {
+                                    dataUrl: img.src
+                                }
                             });
                         });
                     }
                     else {
                         this._layer.clone().ps(effect).replace(img).complete(() => {
                             resolve({
-                                status: STATUS.SUCESS
+                                status: STATUS.SUCESS,
+                                data: {
+                                    dataUrl: img.src
+                                }
                             });
                         });
+                    }
+                    if (opt['operate'] !== FLAG_REDO && opt['operate'] !== FLAG_UNDO && this._curPSEffect !== effect) {
+                        this._curPSEffect = effect;
+                        this._psStack.push({ effect });
                     }
                 }
                 catch (err) {
@@ -268,17 +316,64 @@ export class Imager {
      * 
      * @memberOf Imager
      */
-    undo(): void {
-        if (this._layer) {
-            let img = this._doms['img'];
-            if (this._hasDoView && img) {
-                this._layer.undoView().replace(img);
-                this._hasDoView = false;
+    undo(opt: Object = null): Promise<any> {
+            if (this._layer) {
+                let effectCategory = opt['effectCategory'];
+                let img: HTMLImageElement = this._doms['img'];
+                if (effectCategory === EFFECT_CATEGORIES.PS) {
+                    let params = {
+                        operate: FLAG_UNDO,
+                        effect: this._psStack.load(FLAGS_STACK.BOTTOM)['effect']
+                    };
+                    return this.ps(params);
+                }
+                else if (this._hasDoView && img) {
+                    return new Promise((resolve, reject) => {
+                        this._layer.undoView().replace(img).completion(() => {
+                            this._hasDoView = false;
+                            resolve({
+                                status: STATUS.SUCESS,
+                                data: {
+                                    dataUrl: img.src
+                                }
+                            });
+                        });
+                    });
+                }
+                else {
+                    return new Promise((resolve, reject) => {
+                        resolve({
+                            status: STATUS.FAIL
+                        });
+                    });
+                }
             }
+    }
 
-            this._minusCount();
-            this._layer.undoView().show();
+    /**
+     * 重做
+     * 
+     * @param {Object} [opt=null]
+     * 
+     * @memberOf Imager
+     */
+    redo(opt: Object = null): Promise<any> {
+        if (this._layer) {
+            let effectCategory = opt['effectCategory'];
+            let img = this._doms['img'];
+            if (effectCategory === EFFECT_CATEGORIES.PS) {
+                let params = {
+                    operate: FLAG_REDO,
+                    effect: this._psStack.load(FLAGS_STACK.TOP)['effect']
+                };
+                return this.ps(params);
+            }
         }
+        return new Promise((resolve, reject) => {
+            resolve({
+                status: STATUS.FAIL
+            });
+        });
     }
 
     /**
@@ -396,6 +491,40 @@ export class Imager {
                 window.frames[SELECTORS.SAVE_IFRAME].document.execCommand('saveAs');
             };
             iframe.src = this._layer.save();
+        });
+    }
+
+    /**
+     * 获得图像宽高
+     * 
+     * @param {HTMLImageElement} imgElem
+     * @returns {Promise<any>}
+     * 
+     * @memberOf Imager
+     */
+    getImageDimension(imgElem: HTMLImageElement): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let width = 0, height = 0;
+            if (imgElem && imgElem.src) {
+                let image: HTMLImageElement = new Image();
+                image.onload = () => {
+                    width = image.naturalWidth;
+                    height = image.naturalHeight;
+                    resolve({
+                        status: STATUS.SUCESS,
+                        data: {
+                            width, height
+                        }
+                    })
+                };
+                image.src = imgElem.src;
+            }
+            else {
+                resolve({
+                    status: STATUS.FAIL,
+                    msg: 'Lack of Image Element!'
+                });
+            }
         });
     }
 }
