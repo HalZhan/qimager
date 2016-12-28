@@ -1,0 +1,20 @@
+<div class="right">
+    <div class="picWrapper" *ngIf="sharedData.curStage===0">
+        <a class="small-yuantu" href="javascript:;" *ngIf="sharedData.hasLoaded">
+            <span class="yuantu-text">原图</span>
+            <img src="{{sharedData.imageOriginUrl}}" alt="" draggable="false">
+        </a>
+        <img src="{{sharedData.imageEffectUrl}}" alt="" draggable="false" *ngIf="sharedData.hasLoaded">
+    </div>
+    <div class="picCompare" *ngIf="sharedData.curStage===1">
+        <div class="yuantu">
+            <p>原图：</p>
+            <img class="yuantu" src="{{sharedData.imageOriginUrl}}" alt="" draggable="false">
+        </div>
+        <div class="effect">
+            <p>效果图：</p>
+            <img class="effect" src="{{sharedData.imageEffectUrl}}" alt="" draggable="false">
+        </div>
+    </div>
+    <div *ngIf="sharedData.isProcessing" data-qimager-elem="loadingWrap" class="infoMsg">处理中</div>
+</div>
