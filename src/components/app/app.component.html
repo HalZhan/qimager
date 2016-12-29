@@ -1,48 +1,5 @@
-<div class="header">
-  <input type="file" style="display:none;" data-qimager-elem="imageInput" (change)="imageChange($event)">
-  <img data-qimager-elem="image" src="" alt="" draggable="false" style="display:none;">
-  <div class="logo">在线图片编辑器</div>
-  <div class="function-btns">
-    <a (click)="openFile()" class="fun-btn open" href="javascript:;"><i class="iconfont icon-open"></i>打开图片</a>
-    <a class="fun-btn cut" href="javascript:;"><i class="iconfont icon-cut"></i>剪裁</a>
-    <a (click)="undo()" class="fun-btn cancel" href="javascript:;"><i class="iconfont icon-cancel2"></i>撤销</a>
-    <a (click)="redo()" class="fun-btn redo" href="javascript:;"><i class="iconfont icon-redo"></i>重做</a>
-    <!--<a class="fun-btn yuantu" href="javascript:;"><i class="iconfont icon-yuantu"></i>原图</a>-->
-    <a class="fun-btn compare" href="javascript:;"><i class="iconfont icon-compare"></i>对比</a>
-    <!--<a class="fun-btn saveEffect" href="javascript:;"><i class="iconfont icon-saveEffect"></i>保存效果</a>-->
-    <a (click)="saveFile()" class="fun-btn save" href="javascript:;"><i class="iconfont icon-save"></i>保存</a>
-  </div>
-</div>
+<header-area></header-area>
 <div class="wrapper">
-  <div class="left" style="height: 100%;">
-    <h3>效果</h3>
-    <ul id="effects" class="effects">
-      <li *ngFor="let obj of PS_PICTURE_NAMES" class="e_item" (click)="ps(obj.effect)" >
-        <div class="imgWrapper">
-          <img src="{{'../../../public/slicing/images/'+obj.pic+'.png'}}" alt="">{{obj.effect}}
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div class="right">
-    <div class="picWrapper ">
-      <a class="small-yuantu" href="javascript:;" *ngIf="showFlag">
-        <span class="yuantu-text">原图</span>
-        <img src="{{imageOriginUrl}}" alt="" draggable="false" >
-      </a>
-      <img src="{{imageEffectUrl}}" alt="" draggable="false" *ngIf="showFlag">
-      <div data-qimager-elem="loadingWrap" class="infoMsg dn">处理中</div>
-    </div>
-    <div class="picCompare dn">
-      <div class="yuantu">
-        <p>原图：</p>
-        <img class="yuantu" src="{{imageOriginUrl}}" alt="" draggable="false">
-      </div>
-      <div class="effect">
-        <p>效果图：</p>
-        <img class="effect" src="{{imageEffectUrl}}" alt="" draggable="false">
-      </div>
-    </div>
-
-  </div>
+  <effect-area></effect-area>
+  <stage-area></stage-area>
 </div>

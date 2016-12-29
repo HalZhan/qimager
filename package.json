@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/HalZhan/qimager#readme",
   "devDependencies": {
+    "@types/lodash": "^4.14.44",
     "@types/node": "0.0.2",
     "angular2-template-loader": "^0.6.0",
     "awesome-typescript-loader": "^3.0.0-beta.9",
@@ -52,6 +53,7 @@
     "@angular/router": "^3.2.4",
     "core-js": "^2.4.1",
     "jquery": "^3.1.1",
+    "lodash": "^4.17.2",
     "rxjs": "^5.0.0-rc.4",
     "zone.js": "^0.7.2"
   }

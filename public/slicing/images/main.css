@@ -191,7 +191,8 @@ a:hover.fun-btn{
 .infoMsg{
     position:absolute;
     top:150px;
-    left:350px;
+    left:50%;
+    margin-left: -50px;
     z-index:9;
     width:100px;
     height:100px;
@@ -223,6 +224,9 @@ a:hover.fun-btn{
     left: 50%;
     margin-top: -250px;
     margin-left: -400px;
+}
+.picWrapper img {
+    width: 100%;
 }
 .pic{
     position:absolute;
