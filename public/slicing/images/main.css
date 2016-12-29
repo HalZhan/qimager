@@ -1,11 +1,11 @@
 /*字体*/
 
 @font-face {font-family: "iconfont";
-  src: url('http://static.iqiyi.com/ext/common/online-font/iconfont.eot'); /* IE9*/
-  src: url('http://static.iqiyi.com/ext/common/online-font/iconfont.eot') format('embedded-opentype'), /* IE6-IE8 */
-  url('http://static.iqiyi.com/ext/common/online-font/iconfont.woff') format('woff'), /* chrome, firefox */
-  url('http://static.iqiyi.com/ext/common/online-font/iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('http://static.iqiyi.com/ext/common/online-font/iconfont.svg') format('svg'); /* iOS 4.1- */
+  src: url('../online-font/iconfont.eot'); /* IE9*/
+  src: url('../online-font/iconfont.eot') format('embedded-opentype'), /* IE6-IE8 */
+  url('../online-font/iconfont.woff') format('woff'), /* chrome, firefox */
+  url('../online-font/iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../online-font/iconfont.svg') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -28,8 +28,27 @@
 .icon-saveEffect:before { content: "\e606"; font-size: 18px;}
 .icon-save:before { content: "\e63d"; font-size: 18px;}
 .save{margin-left: 100px;}
+.adv-title .iconfont{
+    width: 24px;
+    margin-right: 8px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 24px;
+}
+.icon-arrow:before{content:"\e93d"; position: absolute; top:0; right:10px; }
+.adv-title.selected .icon-arrow:before{content:"\e60d"; position: absolute; top:0; right:10px; font-size: 20px; }
+.icon-jichu:before{content:"\e60b"; font-size: 20px;}
+.icon-quxian:before{content:"\e640"; font-size: 22px;}
+.icon-huidu:before{content:"\e646";}
+.icon-gaosi:before{content:"\e67d";}
+.icon-ruihua:before{content:"\e67b";}
+.icon-masaike:before{content:"\e61c"; font-size: 20px;}
+.icon-zase:before{content:"\e609";}
+.icon-anjiao:before{content:"\e60f";}
+
+
 html,body{
-    background:url(dark_embroidery.png);
+    background:#26292d url(dark_embroidery.png);
     height:100%;
     padding:0;
     margin:0;
@@ -126,7 +145,7 @@ a:hover.fun-btn{
     width: 50%;
     text-align: center;
     line-height: 50px;
-    background: #000;
+    background: none;
     font-size: 16px;
     cursor: pointer;
     border-bottom: 2px solid #ccc;
@@ -406,20 +425,20 @@ a:hover .yuantu-text{
     position: relative;
 }
 .item-input{
-    border:none;
-    background: none;
-    color:#fff;
-    width: 50px;
     position: absolute;
-    right: 10px;
-    top:10px;
-    text-align: right;
+    right: 0px;
+    top:0px;
+    color:#fff;
+    width: 30px;
+    height: 28px;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
 }
 .bar-box{
     position: relative;
     width: 210px;
 }
-.bar-progress{
+/*.bar-progress{
     width: 210px;
     height: 4px;
     border-radius: 2px;
@@ -437,7 +456,7 @@ a:hover .yuantu-text{
     border: 1px solid #a1a1a1;
     background:-webkit-gradient(linear,50% 0,50% 100%,from(#fefefe),to(#d0d0d0));
     cursor: pointer;
-}
+}*/
 .bar-btns{
     margin-top: 30px;
     text-align: center;
@@ -457,12 +476,16 @@ a:hover .yuantu-text{
     text-decoration: none;
     text-shadow:none;
 }
-
+.bar-btns a:hover.bar-btn{
+    color: #6e6c6c;
+    background:-webkit-gradient(linear,50% 0,50% 100%,from(#f0eeee),to(#c5c3c3));
+}
 
 .adv-title{
+    position: relative;
     height: 50px;
     line-height: 50px;
-    padding-left: 50px;
+    padding-left: 10px;
     background: #666;
     background:-webkit-gradient(linear,50% 0,50% 100%,from(#8a8a8a),to(#3b3b3b));
     cursor: pointer; 
