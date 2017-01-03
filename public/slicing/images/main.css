@@ -246,13 +246,15 @@ a:hover.fun-btn{
 }
 .picWrapper img {
     width: 100%;
+    z-index: 1;
 }
+
 .pic{
     position:absolute;
     left:0;
     top:0;
-    2box-shadow:6px 6px 3px #333;
-    2-webkit-box-shadow:6px 6px 3px #333;
+    box-shadow:6px 6px 3px #333;
+    -webkit-box-shadow:6px 6px 3px #333;
 }
 /*.command{
     background:#27282b;
@@ -387,6 +389,7 @@ a.button:hover{
     width: 150px;
     height: 94px;
     cursor: pointer;
+    z-index: 2;
 }
 .yuantu-text{
     display: none;
@@ -490,9 +493,6 @@ a:hover .yuantu-text{
     background:-webkit-gradient(linear,50% 0,50% 100%,from(#8a8a8a),to(#3b3b3b));
     cursor: pointer; 
 }
-.adv-title.selected{
-
-}
 
 /*loading*/
 .loading{
@@ -510,7 +510,7 @@ a:hover .yuantu-text{
   height: 80px;
   border: 1px solid transparent;
   border-radius: 4px;
-  display: inline;
+  display: inline-block;
   cursor: pointer;
 }
 .loading01 {

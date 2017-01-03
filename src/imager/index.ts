@@ -85,12 +85,14 @@ export class Imager {
     _doms: Object = {
         img: HTMLImageElement
     };
+    _originLayer: any = null;
     _layer: any = null;
     _count: number = 0;
     _hasDoView: boolean = false;
     _psStack: Stack = null;
     _actStack: Stack = null;
     _curPSEffect: string = '';
+    _curActEffect: string = '';
 
     constructor(opt: Object = {}) {
         this._doms['img'] = opt['img'];
@@ -120,7 +122,8 @@ export class Imager {
             if (img) {
                 img.loadOnce(() => {
                     try {
-                        this._layer = $AI(img);
+                        this._originLayer = $AI(img);
+                        this._layer = this._originLayer.clone();
                         resolve({
                             status: STATUS.SUCESS,
                             data: {
@@ -173,23 +176,55 @@ export class Imager {
      * 
      * @memberOf Imager
      */
-    act(opt: Object = {}): void {
-        let effect: string = opt['effect'] || '';
-        effect = this.getValidActEffect(effect);
-        if (this.getValidActEffect(effect) && this._layer) {
-            let img = this._doms['img'];
-            switch (effect) {
-                case 'origin':
-                    this.displayOrigin();
-                    break;
-                default:
-                    this._addCount();
-                    this._layer.view(effect).replace(img);
-                    this._layer.doView();
-                    this._hasDoView = true;
-                    break;
+    act(opt: Object = {}): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let effect: string = opt['effect'] || '';
+            let params: Array<number | string> = opt['params'] || [];
+            let img: HTMLImageElement = this._doms['img'];
+            effect = this.getValidActEffect(effect);
+            if (this.getValidActEffect(effect) && this._layer) {
+                if (effect === EFFECT_ORIGIN) {
+                    this._originLayer.clone().replace(img).complete(() => {
+                        resolve({
+                            status: STATUS.SUCESS,
+                            data: {
+                                dataUrl: img.src
+                            }
+                        });
+                    });
+                }
+                else {
+                    params.unshift(effect);
+                    try {
+                        let layer = this._layer.clone();
+                        layer
+                            .act.apply(layer, params)
+                            .replace.call(layer, img)
+                            .complete.call(layer, () => {
+                                resolve({
+                                    status: STATUS.SUCESS,
+                                    data: {
+                                        dataUrl: img.src
+                                    }
+                                });
+                            });
+                    }
+                    catch (err) {
+                        resolve({
+                            status: STATUS.ERROR,
+                            msg: 'ERROR!',
+                            data: err
+                        });
+                    }
+                }
             }
-        }
+            else {
+                resolve({
+                    status: STATUS.FAIL,
+                    msg: 'Lack of params!'
+                });
+            }
+        });
     }
 
     /**
@@ -226,7 +261,7 @@ export class Imager {
             let img: HTMLImageElement = this._doms['img'];
             if (this._layer && img && effect) {
                 try {
-                    if(this._curPSEffect && this._curPSEffect === effect) {
+                    if (this._curPSEffect && this._curPSEffect === effect) {
                         resolve({
                             status: STATUS.SUCESS,
                             data: {
@@ -269,7 +304,7 @@ export class Imager {
             else {
                 resolve({
                     status: STATUS.FAIL,
-                    msg: 'Lacked params!'
+                    msg: 'Lack of params!'
                 });
             }
         });
@@ -317,37 +352,37 @@ export class Imager {
      * @memberOf Imager
      */
     undo(opt: Object = null): Promise<any> {
-            if (this._layer) {
-                let effectCategory = opt['effectCategory'];
-                let img: HTMLImageElement = this._doms['img'];
-                if (effectCategory === EFFECT_CATEGORIES.PS) {
-                    let params = {
-                        operate: FLAG_UNDO,
-                        effect: this._psStack.load(FLAGS_STACK.BOTTOM)['effect']
-                    };
-                    return this.ps(params);
-                }
-                else if (this._hasDoView && img) {
-                    return new Promise((resolve, reject) => {
-                        this._layer.undoView().replace(img).completion(() => {
-                            this._hasDoView = false;
-                            resolve({
-                                status: STATUS.SUCESS,
-                                data: {
-                                    dataUrl: img.src
-                                }
-                            });
-                        });
-                    });
-                }
-                else {
-                    return new Promise((resolve, reject) => {
-                        resolve({
-                            status: STATUS.FAIL
-                        });
-                    });
-                }
+        if (this._layer) {
+            let effectCategory = opt['effectCategory'];
+            let img: HTMLImageElement = this._doms['img'];
+            if (effectCategory === EFFECT_CATEGORIES.PS) {
+                let params = {
+                    operate: FLAG_UNDO,
+                    effect: this._psStack.load(FLAGS_STACK.BOTTOM)['effect']
+                };
+                return this.ps(params);
             }
+            else if (this._hasDoView && img) {
+                return new Promise((resolve, reject) => {
+                    this._layer.undoView().replace(img).completion(() => {
+                        this._hasDoView = false;
+                        resolve({
+                            status: STATUS.SUCESS,
+                            data: {
+                                dataUrl: img.src
+                            }
+                        });
+                    });
+                });
+            }
+            else {
+                return new Promise((resolve, reject) => {
+                    resolve({
+                        status: STATUS.FAIL
+                    });
+                });
+            }
+        }
     }
 
     /**
@@ -464,33 +499,6 @@ export class Imager {
                     status: STATUS.SUCESS
                 });
             };
-        });
-    }
-
-    /**
-     * 保存图像文件
-     * 
-     * @returns {Promise<any>}
-     * 
-     * @memberOf Imager
-     */
-    saveImageFile(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            let iframe: HTMLIFrameElement = <HTMLIFrameElement>window.frames[SELECTORS.SAVE_IFRAME];
-            if (!iframe) {
-                iframe = <HTMLIFrameElement>document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.id = SELECTORS.SAVE_IFRAME;
-                iframe.name = SELECTORS.SAVE_IFRAME;
-                // let script = <HTMLScriptElement>document.createElement('script');
-                // script.innerText = `document.domain=${location.host}`;
-                // iframe.contentWindow.document.body.appendChild(script);
-                document.querySelector('body').appendChild(iframe);
-            }
-            iframe.onload = () => {
-                window.frames[SELECTORS.SAVE_IFRAME].document.execCommand('saveAs');
-            };
-            iframe.src = this._layer.save();
         });
     }
 

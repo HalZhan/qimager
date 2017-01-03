@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Imager, STATUS, EFFECT_CATEGORIES } from '../../imager';
 import { SharedService, SharedData } from '../../services/shared.service';
+import { ActItem } from '../act-item/ActItem';
 import * as _ from 'lodash';
 
 @Component({
@@ -27,6 +28,58 @@ export class EffectAreaComponent {
         { effect: '粗糙', pic: 'cucao' }
     ];
 
+    ACT_EFFECTS: Array<any> = [{
+        actName: '基础调整', actIcon: 'icon-jichu', actEffect: 'brightness', 
+        options: [{
+            optionName: '亮度', value: 0, min: -50, max: 50, step: 1
+        }, {
+            optionName: '对比度', value: 0, min: -50, max: 50, step: 1
+        }]
+    }, {
+        actName: '色相/饱和度调节', actIcon: 'icon-jichu', actEffect: 'setHSI', 
+        options: [{
+            optionName: '色相', value: 0, min: -50, max: 50, step: 1
+        }, {
+            optionName: '饱和度', value: 0, min: -50, max: 50, step: 1
+        }, {
+            optionName: '明度', value: 0, min: -50, max: 50, step: 1
+        }, {
+            optionName: '着色', value: 0, min: -50, max: 50, step: 1, type: 'checkbox'
+        }]
+    }, {
+        actName: '灰度阈值', actIcon: 'icon-huidu', actEffect: 'toThresh', 
+        options: [{
+            optionName: '阈值', value: 127, min: 0, max: 255, step: 1
+        }]
+    }, {
+        actName: '高斯模糊', actIcon: 'icon-gaosi', actEffect: 'gaussBlur', 
+        options: [{
+            optionName: '大小', value: 0, min: 0, max: 20, step: 1
+        }]
+    }, {
+        actName: '锐化', actIcon: 'icon-ruihua', actEffect: 'sharp', 
+        options: [{
+            optionName: '大小', value: 0, min: 0, max: 20, step: 1
+        }]
+    }, {
+        actName: '马赛克', actIcon: 'icon-masaike', actEffect: 'mosaic', 
+        options: [{
+            optionName: '大小', value: 0, min: 0, max: 20, step: 1
+        }]
+    }, {
+        actName: '添加杂色', actIcon: 'icon-zase', actEffect: 'noise', 
+        options: [{
+            optionName: '数量', value: 0, min: 0, max: 20, step: 1
+        }]
+    }, {
+        actName: '暗角', actIcon: 'icon-anjiao', actEffect: 'darkCorner', 
+        options: [{
+            optionName: '大小', value: 0, min: 0, max: 10, step: 1
+        }, {
+            optionName: '增加暗度', value: 0, min: 0, max: 255, step: 1
+        }]
+    }];
+
     sharedData: SharedData;
 
     constructor(private sharedSerivce: SharedService) {
@@ -34,8 +87,26 @@ export class EffectAreaComponent {
     }
 
     /**
-    * PS图像
-    */
+     * 监听act参数变化
+     */
+    onActChange(opt: ActItem = null) {
+        let data: any = null;
+        if (opt) {
+            let params: Array<number> = [];
+            for (let option of opt.options) {
+                params.push(parseInt(String(option.value), 10));
+            }
+            data = {
+                effect: opt.actEffect,
+                params
+            };
+        }
+        this.act(data);
+    }
+
+    /**
+     * PS图像
+     */
     ps(effect: string = ''): void {
         if (this.sharedData.imager && effect && this.sharedData.hasLoaded) {
             this.sharedData.isProcessing = true;
@@ -53,9 +124,20 @@ export class EffectAreaComponent {
     /**
      * 图像高级效果
      */
-    act(effect: string = ''): void {
-        if (this.sharedData.imager && effect) {
-            this.sharedData.imager.act({ effect });
+    act(opt: Object = null): void {
+        if (this.sharedData.imager && opt && this.sharedData.hasLoaded) {
+            this.sharedData.isProcessing = true;
+            setTimeout(() => {
+                this.sharedData.imager.act(opt).then(data => {
+                    if (data.status === STATUS.SUCESS) {
+                        this.sharedData.imageEffectUrl = data.data.dataUrl;
+                    }
+                    else {
+                        console.info('ACT FAILED', data);
+                    }
+                    this.sharedData.isProcessing = false;
+                });
+            }, 100);
         }
     }
 }

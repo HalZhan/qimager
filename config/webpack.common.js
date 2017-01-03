@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const helpers = require('./helpers');
@@ -41,6 +42,11 @@ module.exports = {
         test: /\.css$/,
         include: helpers.root('src'),
         loader: 'raw'
+      },
+      {
+        test: /jquery\.js/,
+        loader: 'null',
+        exclude: path.resolve('node_modules')
       }
     ]
   },

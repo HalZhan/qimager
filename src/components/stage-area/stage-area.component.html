@@ -1,19 +1,19 @@
 <div class="right">
     <div class="picWrapper" *ngIf="sharedData.curStage===0">
-        <a class="small-yuantu" href="javascript:;" *ngIf="sharedData.hasLoaded">
-            <span class="yuantu-text">原图</span>
-            <img src="{{sharedData.imageOriginUrl}}" alt="" draggable="false">
+        <a (click)="toggleOrigin()" class="small-yuantu" href="javascript:;" *ngIf="sharedData.hasLoaded">
+            <span class="yuantu-text">{{isOrigin?'原图':'效果'}}</span>
+            <img data-qimager-elem="originImg" src="{{sharedData.imageOriginUrl}}" alt="" draggable="false" style="z-index: 2">
         </a>
-        <img src="{{sharedData.imageEffectUrl}}" alt="" draggable="false" *ngIf="sharedData.hasLoaded">
+        <img data-qimager-elem="effectImg" src="{{sharedData.imageEffectUrl}}" alt="" draggable="false" *ngIf="sharedData.hasLoaded" style="z-index: 1">
     </div>
     <div class="picCompare" *ngIf="sharedData.curStage===1">
         <div class="yuantu">
             <p>原图：</p>
-            <img class="yuantu" src="{{sharedData.imageOriginUrl}}" alt="" draggable="false">
+            <img class="yuantu" src="{{sharedData.imageOriginUrl}}" alt="" draggable="false" >
         </div>
         <div class="effect">
             <p>效果图：</p>
-            <img class="effect" src="{{sharedData.imageEffectUrl}}" alt="" draggable="false">
+            <img class="effect" src="{{sharedData.imageEffectUrl}}" alt="" draggable="false" >
         </div>
     </div>
     <div *ngIf="sharedData.isProcessing" data-qimager-elem="loadingWrap" class="infoMsg">处理中</div>

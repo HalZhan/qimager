@@ -1,0 +1,17 @@
+<li class="e_item">
+    <div class="adv-title {{ actItem.selected? 'selected':''}}" (click)="actItem.selected=!actItem.selected"><i class="iconfont {{actItem.actIcon}}"></i>{{actItem.actName}}<i class="iconfont icon-arrow"></i></div>
+    <div class="function-items" *ngIf="actItem.selected" >
+        <div class="function-item" *ngFor="let option of actItem.options">
+            <div class="item-tit">{{option.optionName}}
+                <span class="item-input" *ngIf="!option.type||option.type==='range'">{{option.value}}</span>
+            </div>
+            <div class="bar-box">
+                <input (change)="changeValue()" type="{{option.type || 'range'}}" [(ngModel)]="option.value" value="{{option.value}}" step="{{option.step}}" min="{{option.min}}" max="{{option.max}}" />
+            </div>
+        </div>
+        <!--<div class="bar-btns">
+            <a href="javascript:;" class="bar-btn" >{{actItem.positiveTitle||'确定'}}</a>
+            <a href="javascript:;" class="bar-btn" >{{actItem.negativeTitle||'取消'}}</a>
+        </div>-->
+    </div>
+</li>

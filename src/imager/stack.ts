@@ -1,4 +1,6 @@
-
+/**
+ * 栈操作标识
+ */
 export const FLAGS_STACK = {
     NODIRECTION: 0,
     TOP: 1,

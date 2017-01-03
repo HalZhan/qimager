@@ -17,46 +17,7 @@
     <!--高级效果 start-->
     <div class="advanced-effects {{ sharedData.effectCategory===1? '' :'dn'}}">
         <ul class="advanced-effects-con">
-            <li class="e_item selected">
-                <div class="adv-title">基础调整</div>
-                <div class="function-items ">
-                    <div class="function-item">
-                        <div class="item-tit">亮度/对比度
-                            <input class="item-input" type="range" value="0" step="1" min="-50" max="50" />
-                        </div>
-                    </div>
-                    <div class="function-item">
-                        <div class="item-tit">色相/饱和度调节
-                            <input class="item-input" type="range" value="0" step="1" min="-50" max="50" />
-                        </div>
-                    </div>
-                    <div class="bar-btns">
-                        <a href="javascript:;" class="bar-btn">确定</a>
-                        <a href="javascript:;" class="bar-btn">取消</a>
-                    </div>
-                </div>
-            </li>
-            <!--<li class="e_item">
-          <div class="adv-title ">曲线</div>
-        </li>-->
-            <li class="e_item">
-                <div class="adv-title">灰度阈值</div>
-            </li>
-            <li class="e_item">
-                <div class="adv-title">高斯模糊</div>
-            </li>
-            <li class="e_item">
-                <div class="adv-title">锐化</div>
-            </li>
-            <li class="e_item">
-                <div class="adv-title">马赛克</div>
-            </li>
-            <li class="e_item">
-                <div class="adv-title">添加杂色</div>
-            </li>
-            <li class="e_item">
-                <div class="adv-title">暗角</div>
-            </li>
+            <act-item *ngFor="let item of ACT_EFFECTS" [actItem]="item" (changeEvent)="onActChange($event)" ></act-item>
         </ul>
     </div>
     <!--高级效果 end-->
