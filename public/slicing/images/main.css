@@ -35,8 +35,8 @@
     vertical-align: middle;
     font-size: 24px;
 }
-.icon-arrow:before{content:"\e93d"; position: absolute; top:0; right:10px; }
-.adv-title.selected .icon-arrow:before{content:"\e60d"; position: absolute; top:0; right:10px; font-size: 20px; }
+.icon-arrow:before{content:"\e93d"; position: absolute; top:0; right:10px; font-size: 20px;}
+.adv-title.selected .icon-arrow:before{content:"\e60d"; position: absolute; top:0; right:12px; font-size: 16px; }
 .icon-jichu:before{content:"\e60b"; font-size: 20px;}
 .icon-quxian:before{content:"\e640"; font-size: 22px;}
 .icon-huidu:before{content:"\e646";}
@@ -118,13 +118,22 @@ a:hover.fun-btn{
     -webkit-box-orient:horizontal;
     */
 }
-.left{
+.left-wrapper{
     width:250px;
     border-right:1px solid #575C62;
-    height: 84.6%;
+    height: 92.6%;
     float:left;
     padding:0;
     position: relative;
+}
+.left{
+    height: 91%;
+    /*width:250px;*/
+    /*border-right:1px solid #575C62;*/
+    /*height: 84.6%;*/
+    /*float:left;*/
+    /*padding:0;*/
+    /*position: relative;*/
 }
 .right{
     /*
