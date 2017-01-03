@@ -1,7 +1,7 @@
 <div class="right">
     <div class="picWrapper" *ngIf="sharedData.curStage===0">
         <a (click)="toggleOrigin()" class="small-yuantu" href="javascript:;" *ngIf="sharedData.hasLoaded">
-            <span class="yuantu-text">{{isOrigin?'原图':'效果'}}</span>
+            <span class="yuantu-text">{{isOrigin?'效果':'原图'}}</span>
             <img data-qimager-elem="originImg" src="{{sharedData.imageOriginUrl}}" alt="" draggable="false" style="z-index: 2">
         </a>
         <img data-qimager-elem="effectImg" src="{{sharedData.imageEffectUrl}}" alt="" draggable="false" *ngIf="sharedData.hasLoaded" style="z-index: 1">
