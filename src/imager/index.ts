@@ -196,7 +196,7 @@ export class Imager {
                 else {
                     params.unshift(effect);
                     try {
-                        let layer = this._layer.clone();
+                        let layer = this._layer;
                         layer
                             .act.apply(layer, params)
                             .replace.call(layer, img)
@@ -270,7 +270,8 @@ export class Imager {
                         });
                     }
                     else if (effect === EFFECT_ORIGIN) {
-                        this._layer.clone().replace(img).complete(() => {
+                        this._layer = this._originLayer.clone();
+                        this._layer.replace(img).complete(() => {
                             resolve({
                                 status: STATUS.SUCESS,
                                 data: {

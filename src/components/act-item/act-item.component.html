@@ -1,5 +1,5 @@
 <li class="e_item">
-    <div class="adv-title {{ actItem.selected? 'selected':''}}" (click)="actItem.selected=!actItem.selected"><i class="iconfont {{actItem.actIcon}}"></i>{{actItem.actName}}<i class="iconfont icon-arrow"></i></div>
+    <div class="adv-title {{ actItem.selected? 'selected':''}}" (click)="toggleSelected()"><i class="iconfont {{actItem.actIcon}}"></i>{{actItem.actName}}<i class="iconfont icon-arrow"></i></div>
     <div class="function-items" *ngIf="actItem.selected" >
         <div class="function-item" *ngFor="let option of actItem.options">
             <div class="item-tit">{{option.optionName}}

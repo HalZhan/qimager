@@ -9,8 +9,14 @@ import { ActItem } from './ActItem';
 export class ActItemComponent {
     @Input() actItem: ActItem;
     @Output() changeEvent: EventEmitter<any> = new EventEmitter();
+    @Output() selectEvent: EventEmitter<any> = new EventEmitter();
 
-    changeValue() {
+    changeValue(): void {
         this.changeEvent.emit(this.actItem);
+    }
+
+    toggleSelected(): void {
+        this.actItem.selected = !this.actItem.selected;
+        this.selectEvent.emit(this.actItem);
     }
 }

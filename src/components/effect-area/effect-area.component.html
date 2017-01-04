@@ -1,24 +1,26 @@
-<div class="left">
-    <div class="tab">
-        <ul>
-            <li class="{{ sharedData.effectCategory===0? 'selected':''}}" (click)="sharedData.effectCategory=0">效果</li>
-            <li class="{{ sharedData.effectCategory===1? 'selected':''}}" (click)="sharedData.effectCategory=1">高级效果</li>
-        </ul>
+<div class="left-wrapper">
+    <div class="left">
+        <div class="tab">
+            <ul>
+                <li class="{{ sharedData.effectCategory===0? 'selected':''}}" (click)="sharedData.effectCategory=0">效果</li>
+                <li class="{{ sharedData.effectCategory===1? 'selected':''}}" (click)="sharedData.effectCategory=1">高级效果</li>
+            </ul>
+        </div>
+        <div class="effects-box {{ sharedData.effectCategory===0? '' :'dn'}}">
+            <ul id="effects" class="effects">
+                <li *ngFor="let obj of PS_PICTURE_NAMES" class="e_item" (click)="ps(obj.effect)">
+                    <div class="imgWrapper">
+                        <img src="{{'../../../public/slicing/images/'+obj.pic+'.png'}}" alt="">{{obj.effect}}
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--高级效果 start-->
+        <div class="advanced-effects {{ sharedData.effectCategory===1? '' :'dn'}}">
+            <ul class="advanced-effects-con">
+                <act-item *ngFor="let item of ACT_EFFECTS" [actItem]="item" (changeEvent)="onActChange($event)" (selectEvent)="onActSelected($event)" ></act-item>
+            </ul>
+        </div>
+        <!--高级效果 end-->
     </div>
-    <div class="effects-box {{ sharedData.effectCategory===0? '' :'dn'}}">
-        <ul id="effects" class="effects">
-            <li *ngFor="let obj of PS_PICTURE_NAMES" class="e_item" (click)="ps(obj.effect)">
-                <div class="imgWrapper">
-                    <img src="{{'../../../public/slicing/images/'+obj.pic+'.png'}}" alt="">{{obj.effect}}
-                </div>
-            </li>
-        </ul>
-    </div>
-    <!--高级效果 start-->
-    <div class="advanced-effects {{ sharedData.effectCategory===1? '' :'dn'}}">
-        <ul class="advanced-effects-con">
-            <act-item *ngFor="let item of ACT_EFFECTS" [actItem]="item" (changeEvent)="onActChange($event)" ></act-item>
-        </ul>
-    </div>
-    <!--高级效果 end-->
 </div>

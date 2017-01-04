@@ -89,7 +89,7 @@ export class EffectAreaComponent {
     /**
      * 监听act参数变化
      */
-    onActChange(opt: ActItem = null) {
+    onActChange(opt: ActItem = null): void {
         let data: any = null;
         if (opt) {
             let params: Array<number> = [];
@@ -102,6 +102,19 @@ export class EffectAreaComponent {
             };
         }
         this.act(data);
+    }
+
+    /**
+     * 监听选项选中
+     */
+    onActSelected(opt:ActItem = null): void {
+        if(opt) {
+            for(let item of this.ACT_EFFECTS) {
+                if(opt.actEffect !== item.actEffect) {
+                    item.selected = false;
+                }
+            }
+        }
     }
 
     /**
