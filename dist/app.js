@@ -4,11 +4,10 @@ webpackJsonp([0],[
 
 	"use strict";
 	const platform_browser_dynamic_1 = __webpack_require__(1);
-	const core_1 = __webpack_require__(3);
 	const app_module_1 = __webpack_require__(23);
-	if ((production) === 'production') {
-	    core_1.enableProdMode();
-	}
+	// if (process.env.ENV === 'production') {
+	//   enableProdMode();
+	// }
 	platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule);
 
 
@@ -5430,7 +5429,7 @@ webpackJsonp([0],[
 /* 35 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"header\">\n    <input type=\"file\" style=\"display:none;\" data-qimager-elem=\"imageInput\" (change)=\"imageChange($event)\">\n    <img data-qimager-elem=\"image\" src=\"xxxHTMLLINKxxx0.25507589040884570.019289423971531328xxx\" alt=\"\" draggable=\"false\" style=\"display:none;\">\n    <div class=\"logo\">QImager</div>\n    <div class=\"function-btns\">\n        <a (click)=\"openFile()\" class=\"fun-btn open\" href=\"javascript:;\"><i class=\"iconfont icon-open\"></i>打开图片</a>\n        <!--<a class=\"fun-btn cut\" href=\"javascript:;\"><i class=\"iconfont icon-cut\"></i>剪裁</a>-->\n        <a (click)=\"undo()\" class=\"fun-btn cancel\" href=\"javascript:;\"><i class=\"iconfont icon-cancel2\"></i>撤销</a>\n        <a (click)=\"redo()\" class=\"fun-btn redo\" href=\"javascript:;\"><i class=\"iconfont icon-redo\"></i>恢复</a>\n        <a (click)=\"renew()\" class=\"fun-btn yuantu\" href=\"javascript:;\"><i class=\"iconfont icon-yuantu\"></i>重做</a>\n        <a (click)=\"sharedData.hasLoaded&&(sharedData.curStage=(sharedData.curStage===0)?1:0)\" class=\"fun-btn compare\" href=\"javascript:;\"><i class=\"iconfont icon-compare\"></i>{{sharedData.curStage===0?'对比':'原图'}}</a>\n        <!--<a class=\"fun-btn saveEffect\" href=\"javascript:;\"><i class=\"iconfont icon-saveEffect\"></i>保存效果</a>-->\n        <a (click)=\"saveFile()\" class=\"fun-btn save\" href=\"javascript:;\"><i class=\"iconfont icon-save\"></i>保存</a>\n    </div>\n</div>";
+	module.exports = "<div class=\"header\">\n    <input type=\"file\" style=\"display:none;\" data-qimager-elem=\"imageInput\" (change)=\"imageChange($event)\">\n    <img data-qimager-elem=\"image\" src=\"xxxHTMLLINKxxx0.379916534521953950.5502560317145138xxx\" alt=\"\" draggable=\"false\" style=\"display:none;\">\n    <div class=\"logo\">QImager</div>\n    <div class=\"function-btns\">\n        <a (click)=\"openFile()\" class=\"fun-btn open\" href=\"javascript:;\"><i class=\"iconfont icon-open\"></i>打开图片</a>\n        <!--<a class=\"fun-btn cut\" href=\"javascript:;\"><i class=\"iconfont icon-cut\"></i>剪裁</a>-->\n        <a (click)=\"undo()\" class=\"fun-btn cancel\" href=\"javascript:;\"><i class=\"iconfont icon-cancel2\"></i>撤销</a>\n        <a (click)=\"redo()\" class=\"fun-btn redo\" href=\"javascript:;\"><i class=\"iconfont icon-redo\"></i>恢复</a>\n        <a (click)=\"renew()\" class=\"fun-btn yuantu\" href=\"javascript:;\"><i class=\"iconfont icon-yuantu\"></i>重做</a>\n        <a (click)=\"sharedData.hasLoaded&&(sharedData.curStage=(sharedData.curStage===0)?1:0)\" class=\"fun-btn compare\" href=\"javascript:;\"><i class=\"iconfont icon-compare\"></i>{{sharedData.curStage===0?'对比':'原图'}}</a>\n        <!--<a class=\"fun-btn saveEffect\" href=\"javascript:;\"><i class=\"iconfont icon-saveEffect\"></i>保存效果</a>-->\n        <a (click)=\"saveFile()\" class=\"fun-btn save\" href=\"javascript:;\"><i class=\"iconfont icon-save\"></i>保存</a>\n    </div>\n</div>";
 
 /***/ },
 /* 36 */
