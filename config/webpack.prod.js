@@ -12,7 +12,7 @@ module.exports = webpackMerge(commonConfig, {
 
   output: {
     path: helpers.root('dist'),
-    publicPath: './dist',
+    publicPath: '/qimager/dist',
     filename: '[name].js',
     chunkFilename: '[id].chunk.js'
   },
