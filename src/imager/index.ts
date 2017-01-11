@@ -130,6 +130,7 @@ export class Imager {
                 img.loadOnce(() => {
                     try {
                         this._originLayer = $AI(img);
+                        this._layer = $AI(img);
                         resolve({
                             status: STATUS.SUCESS,
                             data: {
@@ -291,7 +292,7 @@ export class Imager {
                         });
                     }
                     else {
-                        this._layer.clone().ps(effect).replace(img).complete(() => {
+                        this._layer.ps(effect).replace(img).complete(() => {
                             this._stack.push(img.src);
                             resolve({
                                 status: STATUS.SUCESS,
