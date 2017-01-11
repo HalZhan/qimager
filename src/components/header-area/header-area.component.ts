@@ -111,7 +111,7 @@ export class HeaderAreaComponent implements AfterViewInit {
     }
 
     /**
-     * 重做操作
+     * 恢复操作
      */
     redo(): void {
         if (this.sharedData.imager && this.sharedData.hasLoaded) {
@@ -120,6 +120,24 @@ export class HeaderAreaComponent implements AfterViewInit {
                 this.sharedData.imager.redo({
                     effectCategory: this.sharedData.effectCategory
                 })
+                    .then(data => {
+                        if (data.status === STATUS.SUCESS) {
+                            this.sharedData.imageEffectUrl = data.data.dataUrl;
+                        }
+                        this.sharedData.isProcessing = false;
+                    });
+            }, 100);
+        }
+    }
+
+    /**
+     * 重做
+     */
+    renew(): void {
+        if (this.sharedData.imager && this.sharedData.hasLoaded) {
+            this.sharedData.isProcessing = true;
+            setTimeout(() => {
+                this.sharedData.imager.renew()
                     .then(data => {
                         if (data.status === STATUS.SUCESS) {
                             this.sharedData.imageEffectUrl = data.data.dataUrl;

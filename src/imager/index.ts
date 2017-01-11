@@ -74,6 +74,7 @@ const SELECTORS = {
 
 const FLAG_UNDO = 0; // 撤销标识
 const FLAG_REDO = 1; // 重做标识
+const STACK_SIZE = 20; // 操作栈大小
 
 /**
  * Imager类
@@ -87,17 +88,21 @@ export class Imager {
     };
     _originLayer: any = null;
     _layer: any = null;
+    _effectLayers: Object = {};
+    _actLayers: Object = {};
     _count: number = 0;
     _hasDoView: boolean = false;
     _psStack: Stack = null;
     _actStack: Stack = null;
+    _stack: Stack = null;
     _curPSEffect: string = '';
     _curActEffect: string = '';
 
     constructor(opt: Object = {}) {
         this._doms['img'] = opt['img'];
-        this._psStack = new Stack();
-        this._actStack = new Stack();
+        this._psStack = new Stack({ size: STACK_SIZE });
+        this._actStack = new Stack({ size: STACK_SIZE });
+        this._stack = new Stack({ size: STACK_SIZE });
     }
 
     /**
@@ -185,6 +190,7 @@ export class Imager {
             if (this.getValidActEffect(effect) && this._layer) {
                 if (effect === EFFECT_ORIGIN) {
                     this._originLayer.clone().replace(img).complete(() => {
+                        this._stack.push(img.src);
                         resolve({
                             status: STATUS.SUCESS,
                             data: {
@@ -197,10 +203,11 @@ export class Imager {
                     params.unshift(effect);
                     try {
                         let layer = this._layer;
-                        layer
-                            .act.apply(layer, params)
-                            .replace.call(layer, img)
-                            .complete.call(layer, () => {
+                        let tmpLayer = this._layer.clone();
+                        layer.add(tmpLayer.act.apply(tmpLayer, params))
+                            .replace(img)
+                            .complete(() => {
+                                this._stack.push(img.src);
                                 resolve({
                                     status: STATUS.SUCESS,
                                     data: {
@@ -290,10 +297,11 @@ export class Imager {
                             });
                         });
                     }
-                    if (opt['operate'] !== FLAG_REDO && opt['operate'] !== FLAG_UNDO && this._curPSEffect !== effect) {
-                        this._curPSEffect = effect;
-                        this._psStack.push({ effect });
-                    }
+                    // if (opt['operate'] !== FLAG_REDO && opt['operate'] !== FLAG_UNDO && this._curPSEffect !== effect) {
+                    this._curPSEffect = effect;
+                    this._stack.push(img.src);
+                    // this._psStack.push({ effect });
+                    // }
                 }
                 catch (err) {
                     resolve({
@@ -312,41 +320,6 @@ export class Imager {
     }
 
     /**
-     * 增加处理计数
-     * 
-     * 
-     * @memberOf Imager
-     */
-    _addCount(): void {
-        this._count++;
-    }
-
-    /**
-     * 减少处理计数
-     * 
-     * 
-     * @memberOf Imager
-     */
-    _minusCount(): void {
-        this._count--;
-        this._count = this._count < 0 ? 0 : this._count;
-    }
-
-    /**
-     * 显示原图
-     * 
-     * 
-     * @memberOf Imager
-     */
-    displayOrigin(): void {
-        if (this._layer) {
-            while (this._count) {
-                this.undo();
-            }
-        }
-    }
-
-    /**
      * 撤销
      * 
      * 
@@ -356,34 +329,69 @@ export class Imager {
         if (this._layer) {
             let effectCategory = opt['effectCategory'];
             let img: HTMLImageElement = this._doms['img'];
-            if (effectCategory === EFFECT_CATEGORIES.PS) {
-                let params = {
-                    operate: FLAG_UNDO,
-                    effect: this._psStack.load(FLAGS_STACK.BOTTOM)['effect']
-                };
-                return this.ps(params);
-            }
-            else if (this._hasDoView && img) {
-                return new Promise((resolve, reject) => {
-                    this._layer.undoView().replace(img).completion(() => {
-                        this._hasDoView = false;
-                        resolve({
-                            status: STATUS.SUCESS,
-                            data: {
-                                dataUrl: img.src
-                            }
-                        });
-                    });
-                });
-            }
-            else {
-                return new Promise((resolve, reject) => {
-                    resolve({
-                        status: STATUS.FAIL
-                    });
-                });
-            }
+            // if (effectCategory === EFFECT_CATEGORIES.PS) {
+            // let params = {
+            //     operate: FLAG_UNDO,
+            //     effect: this._psStack.load(FLAGS_STACK.BOTTOM)['effect']
+            // };
+            // return this.ps(params);
+            return Promise.resolve({
+                status: STATUS.SUCESS,
+                data: {
+                    dataUrl: this._stack.load(FLAGS_STACK.BOTTOM)
+                }
+            });
+            // }
+            // else if (this._hasDoView && img) {
+            //     return new Promise((resolve, reject) => {
+            //         this._layer.undoView().replace(img).completion(() => {
+            //             this._hasDoView = false;
+            //             resolve({
+            //                 status: STATUS.SUCESS,
+            //                 data: {
+            //                     dataUrl: img.src
+            //                 }
+            //             });
+            //         });
+            //     });
+            // }
         }
+        return new Promise((resolve, reject) => {
+            resolve({
+                status: STATUS.FAIL
+            });
+        });
+    }
+
+    /**
+     * 恢复
+     * 
+     * @param {Object} [opt=null]
+     * 
+     * @memberOf Imager
+     */
+    redo(opt: Object = null): Promise<any> {
+        if (this._layer) {
+            // let effectCategory = opt['effectCategory'];
+            // if (effectCategory === EFFECT_CATEGORIES.PS) {
+            //     let params = {
+            //         operate: FLAG_REDO,
+            //         effect: this._psStack.load(FLAGS_STACK.TOP)['effect']
+            //     };
+            //     return this.ps(params);
+            // }
+            return Promise.resolve({
+                status: STATUS.SUCESS,
+                data: {
+                    dataUrl: this._stack.load(FLAGS_STACK.TOP)
+                }
+            })
+        }
+        return new Promise((resolve, reject) => {
+            resolve({
+                status: STATUS.FAIL
+            });
+        });
     }
 
     /**
@@ -393,17 +401,12 @@ export class Imager {
      * 
      * @memberOf Imager
      */
-    redo(opt: Object = null): Promise<any> {
+    renew(): Promise<any> {
         if (this._layer) {
-            let effectCategory = opt['effectCategory'];
-            let img = this._doms['img'];
-            if (effectCategory === EFFECT_CATEGORIES.PS) {
-                let params = {
-                    operate: FLAG_REDO,
-                    effect: this._psStack.load(FLAGS_STACK.TOP)['effect']
-                };
-                return this.ps(params);
-            }
+            let params = {
+                effect: EFFECT_ORIGIN
+            };
+            return this.ps(params);
         }
         return new Promise((resolve, reject) => {
             resolve({

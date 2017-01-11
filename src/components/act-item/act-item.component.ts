@@ -1,5 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { ActItem } from './ActItem';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'act-item',

@@ -18,7 +18,12 @@ export const FLAGS_STACK = {
 export class Stack {
     _stack: Array<any> = [];
     _ptr: number = -1;
-    constructor() { }
+    _size: number = Number.MAX_VALUE;
+    constructor(opt: Object = {}) {
+        if (opt['size']) {
+            this._size = opt['size'];
+        }
+    }
 
     /**
      * 将指针上移
@@ -39,7 +44,7 @@ export class Stack {
      */
     _moveBottom(): void {
         let total = this._stack.length;
-        if(total) {
+        if (total) {
             this._ptr = this._ptr < 1 ? 0 : this._ptr - 1;
         }
         else {
@@ -56,8 +61,14 @@ export class Stack {
      */
     push(elem: any): void {
         if (elem) {
-            this._stack.push(elem);
-            this._ptr++;
+            if (this._ptr < this._size - 1) {
+                this._stack.push(elem);
+                this._ptr++;
+            }
+            else {
+                this._stack.splice(0, 1);
+                this._stack.push(elem);
+            }
         }
     }
 
@@ -87,7 +98,7 @@ export class Stack {
         if (direction === FLAGS_STACK.TOP) {
             this._moveTop();
         }
-        else if(direction === FLAGS_STACK.BOTTOM) {
+        else if (direction === FLAGS_STACK.BOTTOM) {
             this._moveBottom();
         }
         return this._stack[this._ptr];
