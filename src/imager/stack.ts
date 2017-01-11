@@ -63,7 +63,7 @@ export class Stack {
         if (elem) {
             if (this._ptr < this._size - 1) {
                 this._stack.push(elem);
-                this._ptr++;
+                this._ptr = this._stack.length - 1;
             }
             else {
                 this._stack.splice(0, 1);

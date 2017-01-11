@@ -95,6 +95,7 @@ export class Imager {
     _psStack: Stack = null;
     _actStack: Stack = null;
     _stack: Stack = null;
+    _operateStack: Stack = null;
     _curPSEffect: string = '';
     _curActEffect: string = '';
 
@@ -103,6 +104,7 @@ export class Imager {
         this._psStack = new Stack({ size: STACK_SIZE });
         this._actStack = new Stack({ size: STACK_SIZE });
         this._stack = new Stack({ size: STACK_SIZE });
+        this._operateStack = new Stack();
     }
 
     /**
@@ -128,7 +130,6 @@ export class Imager {
                 img.loadOnce(() => {
                     try {
                         this._originLayer = $AI(img);
-                        this._layer = this._originLayer.clone();
                         resolve({
                             status: STATUS.SUCESS,
                             data: {
@@ -166,9 +167,8 @@ export class Imager {
                 if (data.status === STATUS.SUCESS) {
                     this._actStack.reset();
                     this._psStack.reset();
-                    this._psStack.push({
-                        effect: EFFECT_ORIGIN
-                    });
+                    this._stack.reset();
+                    this._operateStack.reset();
                 }
                 return data;
             });
@@ -187,6 +187,7 @@ export class Imager {
             let params: Array<number | string> = opt['params'] || [];
             let img: HTMLImageElement = this._doms['img'];
             effect = this.getValidActEffect(effect);
+            this._layer = $AI(img);
             if (this.getValidActEffect(effect) && this._layer) {
                 if (effect === EFFECT_ORIGIN) {
                     this._originLayer.clone().replace(img).complete(() => {
@@ -203,7 +204,7 @@ export class Imager {
                     params.unshift(effect);
                     try {
                         let layer = this._layer;
-                        let tmpLayer = this._layer.clone();
+                        let tmpLayer = this._layer;
                         layer.add(tmpLayer.act.apply(tmpLayer, params))
                             .replace(img)
                             .complete(() => {
@@ -266,6 +267,7 @@ export class Imager {
             let effect: string = opt['effect'] || '';
             effect = this.getValidPSEffect(effect);
             let img: HTMLImageElement = this._doms['img'];
+            this._layer = $AI(img);
             if (this._layer && img && effect) {
                 try {
                     if (this._curPSEffect && this._curPSEffect === effect) {
@@ -279,6 +281,7 @@ export class Imager {
                     else if (effect === EFFECT_ORIGIN) {
                         this._layer = this._originLayer.clone();
                         this._layer.replace(img).complete(() => {
+                            this._stack.push(img.src);
                             resolve({
                                 status: STATUS.SUCESS,
                                 data: {
@@ -289,6 +292,7 @@ export class Imager {
                     }
                     else {
                         this._layer.clone().ps(effect).replace(img).complete(() => {
+                            this._stack.push(img.src);
                             resolve({
                                 status: STATUS.SUCESS,
                                 data: {
@@ -299,7 +303,6 @@ export class Imager {
                     }
                     // if (opt['operate'] !== FLAG_REDO && opt['operate'] !== FLAG_UNDO && this._curPSEffect !== effect) {
                     this._curPSEffect = effect;
-                    this._stack.push(img.src);
                     // this._psStack.push({ effect });
                     // }
                 }
@@ -356,10 +359,8 @@ export class Imager {
             //     });
             // }
         }
-        return new Promise((resolve, reject) => {
-            resolve({
-                status: STATUS.FAIL
-            });
+        return Promise.resolve({
+            status: STATUS.FAIL
         });
     }
 
@@ -387,10 +388,8 @@ export class Imager {
                 }
             })
         }
-        return new Promise((resolve, reject) => {
-            resolve({
-                status: STATUS.FAIL
-            });
+        return Promise.resolve({
+            status: STATUS.FAIL
         });
     }
 
@@ -408,10 +407,8 @@ export class Imager {
             };
             return this.ps(params);
         }
-        return new Promise((resolve, reject) => {
-            resolve({
-                status: STATUS.FAIL
-            });
+        return Promise.resolve({
+            status: STATUS.FAIL
         });
     }
 
