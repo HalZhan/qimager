@@ -125,7 +125,7 @@ export class Imager {
      */
     _initLayer(): Promise<any> {
         return new Promise((resolve, reject) => {
-            let img: HTMLImageElement = this._doms['img'] || null;
+            let img: ImagerHTMLImageElement = this._doms['img'] || null;
             if (img) {
                 img.loadOnce(() => {
                     try {

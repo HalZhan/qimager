@@ -12,15 +12,23 @@ module.exports = {
   },
 
   resolve: {
-      extensions: ['', '.ts', '.js'],
-      modulesDirectories: ['web_modules', 'node_modules'],
-      alias: {
-          AlloyImage: 'AlloyImage/combined/alloyimage.js'
-      }
+    extensions: ['', '.ts', '.js'],
+    modulesDirectories: ['web_modules', 'node_modules'],
+    alias: {
+      AlloyImage: 'AlloyImage/combined/alloyimage.js'
+    }
   },
 
   module: {
     loaders: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015']
+        }
+      },
       {
         test: /\.ts$/,
         loaders: ['awesome-typescript-loader', 'angular2-template-loader']
@@ -60,9 +68,9 @@ module.exports = {
       template: 'src/index.html'
     }),
     new webpack.ProvidePlugin({
-        '$': 'jquery',
-        'jQuery': 'jquery',
-        'window.jquery': 'jquery'
+      '$': 'jquery',
+      'jQuery': 'jquery',
+      'window.jquery': 'jquery'
     })
   ]
 };
