@@ -615,3 +615,15 @@ a:hover .yuantu-text{
     transform: scale(1);
   }
 }
+
+.cropper-modal {
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    text-align: center;
+    top: 0px;
+    left: 0px;
+    padding-top: 50px;
+}

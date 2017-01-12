@@ -1,9 +1,8 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import { Imager, STATUS, EFFECT_CATEGORIES } from '../../imager';
 import { SharedService, SharedData } from '../../services/shared.service';
+import { ImageCropperComponent, CropperSettings } from 'ng2-img-cropper';
 import * as _ from 'lodash';
-import * as $ from 'jquery';
-import 'cropper';
 
 /**
  * 选择器
@@ -11,7 +10,8 @@ import 'cropper';
 const SELECTORS = {
     IMAGER: '[data-qimager-elem="image"]',
     LOADING_WRAP: '[data-qimager-elem="loadingWrap"]',
-    IMAGE_INPUT: '[data-qimager-elem="imageInput"]'
+    IMAGE_INPUT: '[data-qimager-elem="imageInput"]',
+    IMAGE_EFFECT: '[data-qimager-elem="effectImg"]'
 };
 
 /**
@@ -22,6 +22,9 @@ const MESSAGES = {
     PLEASE_OPEN: '请先打开一张图片！'
 };
 
+const CROPPER_CANVAS_WIDTH = 800;
+const CROPPER_CANVAS_HEIGHT = 500;
+
 @Component({
     selector: 'header-area',
     templateUrl: './header-area.component.html'
@@ -29,9 +32,22 @@ const MESSAGES = {
 
 export class HeaderAreaComponent implements AfterViewInit {
 
+    @ViewChild(ImageCropperComponent)
+    cropper: ImageCropperComponent;
+
+    cropperSettings: CropperSettings;
+    cropperShow: string = 'none';
     sharedData: SharedData;
+    imageData: Object = {};
+    cropData: Object = {};
+
     constructor(private sharedSerivce: SharedService) {
         this.sharedData = sharedSerivce.getSharedData();
+        this.cropperSettings = new CropperSettings();
+        this.cropperSettings.noFileInput = true;
+        this.cropperSettings.canvasWidth = CROPPER_CANVAS_WIDTH;
+        this.cropperSettings.canvasHeight = CROPPER_CANVAS_HEIGHT;
+        this.cropperSettings.keepAspect = false;
     }
 
     ngAfterViewInit(): void {
@@ -154,8 +170,50 @@ export class HeaderAreaComponent implements AfterViewInit {
      * 剪裁
      */
     doCrop(): void {
-        if(this.sharedData.imager && this.sharedData.hasLoaded) {
-            
+        if (this.sharedData.imager && this.sharedData.hasLoaded) {
+            let image = new Image();
+            image.src = this.sharedData.imageEffectUrl;
+            this.cropper.setImage(image);
+            this.cropperShow = 'block';
+        }
+    }
+
+    /**
+     * 剪裁完成
+     */
+    endCrop(): void {
+        if (this.sharedData.imager && this.sharedData.hasLoaded) {
+            this.sharedData.imager.clip(this.cropData['left'], this.cropData['top'], this.cropData['width'], this.cropData['height'])
+                .then(data => {
+                    if (data.status === STATUS.SUCESS) {
+                        this.sharedData.imageEffectUrl = data.data.dataUrl;
+                    }
+                })
+        }
+        this.cropperShow = 'none';
+    }
+
+    /**
+     * 取消剪裁
+     */
+    cancelCrop(): void {
+        this.cropperShow = 'none';
+    }
+
+    /**
+     * 监听剪裁事件
+     */
+    onCrop(opt: any = null): void {
+        if (opt) {
+            let width = opt.width;
+            let height = opt.height;
+            let centre = opt.getCentre();
+            let x = centre.x, y = centre.y;
+            let top = y - height / 2;
+            let left = x - width / 2;
+            this.cropData = {
+                left, top, width, height
+            };
         }
     }
 }
