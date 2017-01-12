@@ -88,10 +88,6 @@ export class Imager {
     };
     _originLayer: any = null;
     _layer: any = null;
-    _effectLayers: Object = {};
-    _actLayers: Object = {};
-    _count: number = 0;
-    _hasDoView: boolean = false;
     _stack: Stack = null;
     _curPSEffect: string = '';
     _curActEffect: string = '';
