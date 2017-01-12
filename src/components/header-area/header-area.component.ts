@@ -2,6 +2,8 @@ import { Component, AfterViewInit } from '@angular/core';
 import { Imager, STATUS, EFFECT_CATEGORIES } from '../../imager';
 import { SharedService, SharedData } from '../../services/shared.service';
 import * as _ from 'lodash';
+import * as $ from 'jquery';
+import 'cropper';
 
 /**
  * 选择器
@@ -145,6 +147,15 @@ export class HeaderAreaComponent implements AfterViewInit {
                         this.sharedData.isProcessing = false;
                     });
             }, 100);
+        }
+    }
+
+    /**
+     * 剪裁
+     */
+    doCrop(): void {
+        if(this.sharedData.imager && this.sharedData.hasLoaded) {
+            
         }
     }
 }

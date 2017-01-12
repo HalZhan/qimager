@@ -10,14 +10,10 @@ import { StageAreaComponent } from '../components/stage-area/stage-area.componen
 
 import { SharedService } from '../services/shared.service';
 
-
-import { AppRoutesModule } from './app-routes.module';
-
 @NgModule({
     imports: [
         BrowserModule,
-        FormsModule,
-        AppRoutesModule
+        FormsModule
     ],
     providers: [SharedService],
     declarations: [
