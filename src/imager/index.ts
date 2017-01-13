@@ -157,6 +157,7 @@ export class Imager {
             .then(data => {
                 if (data.status === STATUS.SUCESS) {
                     this._stack.reset();
+                    this._stack.push(data.data.dataUrl);
                 }
                 return data;
             });
