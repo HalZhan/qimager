@@ -404,6 +404,7 @@ export class Imager {
                 try {
                     this._layer = $AI(img);
                     this._layer.clip(x0, y0, width, height).replace(img).complete(() => {
+                        this._stack.push(img.src);
                         resolve({
                             status: STATUS.SUCESS,
                             data: {
@@ -467,6 +468,7 @@ export class Imager {
                     this._layer.transform(matrix)
                         .replace(img)
                         .complete(() => {
+                            this._stack.push(img.src);
                             resolve({
                                 status: STATUS.SUCESS,
                                 data: {
