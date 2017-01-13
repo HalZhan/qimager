@@ -36,7 +36,7 @@ export class EffectAreaComponent {
             optionName: '对比度', value: 0, min: -50, max: 50, step: 1
         }]
     }, {
-        actName: '色相/饱和度调节', actIcon: 'icon-jichu', actEffect: 'setHSI', 
+        actName: '色相/饱和度调节', actIcon: 'icon-sexiang', actEffect: 'setHSI', 
         options: [{
             optionName: '色相', value: 0, min: -50, max: 50, step: 1
         }, {
