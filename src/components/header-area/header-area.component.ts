@@ -22,8 +22,16 @@ const MESSAGES = {
     PLEASE_OPEN: '请先打开一张图片！'
 };
 
+/**
+ * 剪裁区域宽度高度
+ */
 const CROPPER_CANVAS_WIDTH = 800;
 const CROPPER_CANVAS_HEIGHT = 500;
+
+/**
+ * 镜像变换参数值
+ */
+const MIRROR_MATRIX = [-1, 0, 0, 1, 0, 0];
 
 @Component({
     selector: 'header-area',
@@ -214,6 +222,22 @@ export class HeaderAreaComponent implements AfterViewInit {
             this.cropData = {
                 left, top, width, height
             };
+        }
+    }
+
+    /**
+     * 镜像
+     */
+    mirror(opt: any = null): void {
+        if (this.sharedData.hasLoaded && this.sharedData.imager) {
+            this.sharedData.isProcessing = true;
+            this.sharedData.imager.transform(MIRROR_MATRIX)
+                .then(data => {
+                    if (data.status === STATUS.SUCESS) {
+                        this.sharedData.imageEffectUrl = data.data.dataUrl;
+                    }
+                    this.sharedData.isProcessing = false;
+                });
         }
     }
 }

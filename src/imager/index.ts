@@ -402,7 +402,8 @@ export class Imager {
             if (this._layer) {
                 let img: HTMLImageElement = this._doms['img'];
                 try {
-                    this._layer.clip(x0, y0, width, height).replace(img).complete(()=>{
+                    this._layer = $AI(img);
+                    this._layer.clip(x0, y0, width, height).replace(img).complete(() => {
                         resolve({
                             status: STATUS.SUCESS,
                             data: {
@@ -411,7 +412,7 @@ export class Imager {
                         });
                     })
                 }
-                catch(err) {
+                catch (err) {
                     resolve({
                         status: STATUS.ERROR,
                         data: err
@@ -457,8 +458,37 @@ export class Imager {
      * 
      * @memberOf Imager
      */
-    transform(matrix: Array<number>): void {
-        if (this._layer) { }
+    transform(matrix: Array<number>): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let img: HTMLImageElement = this._doms['img'];
+            this._layer = $AI(img);
+            if (this._layer) {
+                try {
+                    this._layer.transform(matrix)
+                        .replace(img)
+                        .complete(() => {
+                            resolve({
+                                status: STATUS.SUCESS,
+                                data: {
+                                    dataUrl: img.src
+                                }
+                            });
+                        });
+                }
+                catch (err) {
+                    resolve({
+                        status: STATUS.ERROR,
+                        data: err
+                    });
+                }
+            }
+            else {
+                resolve({
+                    status: STATUS.FAIL,
+                    msg: 'Lack of layer!'
+                });
+            }
+        });
     }
 
     /**
