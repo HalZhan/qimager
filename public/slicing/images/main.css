@@ -38,14 +38,16 @@
 .icon-arrow:before{content:"\e93d"; position: absolute; top:0; right:10px; font-size: 20px;}
 .adv-title.selected .icon-arrow:before{content:"\e60d"; position: absolute; top:0; right:12px; font-size: 16px; }
 .icon-jichu:before{content:"\e60b"; font-size: 20px;}
+.icon-sexiang:before{content:"\e60e"; font-size: 28px; margin-left: -3px;}
 .icon-quxian:before{content:"\e640"; font-size: 22px;}
+
 .icon-huidu:before{content:"\e646";}
 .icon-gaosi:before{content:"\e67d";}
 .icon-ruihua:before{content:"\e67b";}
 .icon-masaike:before{content:"\e61c"; font-size: 20px;}
 .icon-zase:before{content:"\e609";}
 .icon-anjiao:before{content:"\e60f";}
-
+.icon-jingxiang:before{content:"\e618"; font-size: 22px;}
 
 html,body{
     background:#26292d url(dark_embroidery.png);
