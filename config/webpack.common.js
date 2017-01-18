@@ -23,7 +23,14 @@ module.exports = {
     loaders: [
       {
         test: /\.ts$/,
-        loaders: ['awesome-typescript-loader', 'angular2-template-loader']
+        loaders: [
+          'babel-loader?presets[]=es2015',
+          'awesome-typescript-loader',
+          // For angular2:
+          //'angular2-template-loader',
+          //`angular2-router-loader?genDir=compiled/app&aot=true`
+        ],
+        exclude: [/\.(spec|e2e|d)\.ts$/]
       },
       {
         test: /\.html$/,

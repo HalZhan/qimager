@@ -24,16 +24,16 @@ module.exports = webpackMerge(commonConfig, {
   plugins: [
     new webpack.NoErrorsPlugin(),
     new webpack.optimize.DedupePlugin(),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     drop_debugger: true,
-    //     drop_console: true,
-    //     warnings: false // 警告开关
-    //   },
-    //   output: {
-    //     comments: false // 注释开关
-    //   }
-    // }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        drop_debugger: true,
+        drop_console: true,
+        warnings: false // 警告开关
+      },
+      output: {
+        comments: false // 注释开关
+      }
+    }),
     new ExtractTextPlugin('[name].css'),
     new webpack.DefinePlugin({
       'process.env': {
