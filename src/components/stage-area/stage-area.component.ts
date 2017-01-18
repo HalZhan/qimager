@@ -17,7 +17,7 @@ const SELECTORS = {
 export class StageAreaComponent {
     sharedData: SharedData;
     isOrigin: boolean = false;
-    defaultUrl: string = '../../../public/slicing/images/stop.jpg';
+    defaultUrl: string = 'http://halzhan.cn/qimager/public/slicing/images/stop.jpg';
     constructor(private sharedService: SharedService) {
         this.sharedData = sharedService.getSharedData();
     }
