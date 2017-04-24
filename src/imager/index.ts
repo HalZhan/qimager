@@ -1,4 +1,4 @@
-/// <reference path="../declarations.d.ts" />
+// <reference path="../declarations.d.ts" />
 
 import 'AlloyImage';
 import { Stack, FLAGS_STACK } from './stack';

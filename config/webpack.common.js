@@ -1,8 +1,7 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const helpers = require('./helpers');
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var helpers = require('./helpers');
 
 module.exports = {
   entry: {
@@ -12,53 +11,67 @@ module.exports = {
   },
 
   resolve: {
-    extensions: ['', '.ts', '.js'],
-    modulesDirectories: ['web_modules', 'node_modules'],
+    extensions: ['.ts', '.js'],
+    modules: ['web_modules', 'node_modules'],
     alias: {
-      AlloyImage: 'AlloyImage/combined/alloyimage.js'
+        AlloyImage: 'AlloyImage/combined/alloyimage.js'
     }
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.ts$/,
-        loaders: [
-          'babel-loader?presets[]=es2015',
-          'awesome-typescript-loader',
-          // For angular2:
-          'angular2-template-loader',
-          //`angular2-router-loader?genDir=compiled/app&aot=true`
+        use: [
+          {
+            loader: 'awesome-typescript-loader',
+            query: {
+              // use inline sourcemaps for "karma-remap-coverage" reporter
+              sourceMap: false,
+              inlineSourceMap: true,
+              compilerOptions: {
+
+                // Remove TypeScript helpers to be injected
+                // below by DefinePlugin
+                removeComments: true
+
+              }
+            },
+          },
+          'angular2-template-loader'
         ],
-        exclude: [/\.(spec|e2e|d)\.ts$/]
+        exclude: [/\.e2e\.ts$/]
       },
       {
         test: /\.html$/,
-        loader: 'html'
+        loader: 'html-loader'
       },
       {
         test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-        loader: 'file?name=assets/[name].[hash].[ext]'
+        loader: 'file-loader?name=assets/[name].[hash].[ext]'
       },
       {
         test: /\.css$/,
-        exclude: helpers.root('src'),
-        loader: ExtractTextPlugin.extract('style', 'css?sourceMap')
+        exclude: helpers.root('src', 'app'),
+        loader: ExtractTextPlugin.extract({ fallbackLoader: 'style-loader', loader: 'css-loader?sourceMap' })
       },
       {
         test: /\.css$/,
-        include: helpers.root('src'),
-        loader: 'raw'
-      },
-      {
-        test: /jquery\.js/,
-        loader: 'null',
-        exclude: path.resolve('node_modules')
+        include: helpers.root('src', 'app'),
+        loader: 'raw-loader'
       }
     ]
   },
 
   plugins: [
+    // Workaround for angular/angular#11580
+    new webpack.ContextReplacementPlugin(
+      // The (\\|\/) piece accounts for path separators in *nix and Windows
+      /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+      helpers.root('./src'), // location of your src
+      {} // a map of your routes
+    ),
+
     new webpack.optimize.CommonsChunkPlugin({
       name: ['app', 'vendor', 'polyfills']
     }),
@@ -66,6 +79,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html'
     }),
+
     new webpack.ProvidePlugin({
       '$': 'jquery',
       'jQuery': 'jquery',
