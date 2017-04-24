@@ -1,6 +1,6 @@
 {
   "name": "qimager",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "One minimal tool for image processing.",
   "main": "index.js",
   "scripts": {
