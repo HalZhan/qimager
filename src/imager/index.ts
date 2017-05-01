@@ -1,5 +1,3 @@
-// <reference path="../declarations.d.ts" />
-
 import 'AlloyImage';
 import { Stack, FLAGS_STACK } from './stack';
 
@@ -68,12 +66,6 @@ export const EFFECTS_PS = {
  */
 export const EFFECT_ORIGIN: string = 'origin';
 
-const SELECTORS = {
-    SAVE_IFRAME: '__IMAGER_IFRMAE__'
-};
-
-const FLAG_UNDO = 0; // 撤销标识
-const FLAG_REDO = 1; // 重做标识
 const STACK_SIZE = 20; // 操作栈大小
 
 /**

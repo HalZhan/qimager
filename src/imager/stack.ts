@@ -9,7 +9,7 @@ export const FLAGS_STACK = {
 
 /**
  * desc: 栈
- * author: zhanghao
+ * author: halzhan
  * date: 2016/12/19
  * 
  * @export

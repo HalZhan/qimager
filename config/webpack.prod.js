@@ -13,7 +13,7 @@ module.exports = webpackMerge(commonConfig, {
   output: {
     path: helpers.root('dist'),
     publicPath: '/qimager/dist',
-    filename: '[name].js',
+    filename: '[name].[chunkhash].js',
     chunkFilename: '[id].chunk.js'
   },
 
@@ -39,7 +39,7 @@ module.exports = webpackMerge(commonConfig, {
       htmlLoader: {
         minimize: false // workaround for ng2
       }
-    }),
-    new DuplicatePlugin()
+    })
+    // new DuplicatePlugin()
   ]
 });
