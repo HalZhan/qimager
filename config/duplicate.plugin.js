@@ -13,21 +13,21 @@ duplicatePlugin.prototype.apply = function (compiler) {
         // Loop through all compiled assets
         for (let filename in compilation.assets) {
             let file = compilation.assets[filename];
-            if(filename !== INDEX_HTML) {
-                let pathObj = path.parse(filename);
-                let name = `${pathObj.name}_${version}${pathObj.ext}`;
-                compilation.assets[name] = {
-                    source: () => {
-                        return file.source();
-                    },
-                    size: () => {
-                        return file.size();
-                    }
-                };
-            }
-            else {
+            // if(filename !== INDEX_HTML) {
+            //     let pathObj = path.parse(filename);
+            //     let name = `${pathObj.name}_${version}${pathObj.ext}`;
+            //     compilation.assets[name] = {
+            //         source: () => {
+            //             return file.source();
+            //         },
+            //         size: () => {
+            //             return file.size();
+            //         }
+            //     };
+            // }
+            // else {
                 fs.writeFileSync(helpers.root(INDEX_HTML), file.source());
-            }
+            // }
         }
         callback();
     });
