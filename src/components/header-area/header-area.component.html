@@ -1,17 +1,17 @@
 <div class="header">
     <input type="file" style="display:none;" data-qimager-elem="imageInput" (change)="imageChange($event)">
-<img data-qimager-elem="image" src="" alt="" draggable="false" style="display:none;">
-<div class="logo">QImager</div>
-<div class="function-btns">
-    <a (click)="openFile()" class="fun-btn open" href="javascript:;"><i class="iconfont icon-open"></i>打开图片</a>
-    <a (click)="doCrop()" class="fun-btn cut" href="javascript:;"><i class="iconfont icon-cut"></i>剪裁</a>
-    <a (click)="mirror()" class="fun-btn saveEffect" href="javascript:;"><i class="iconfont icon-jingxiang"></i>镜像</a>
-    <a (click)="undo()" class="fun-btn cancel" href="javascript:;"><i class="iconfont icon-cancel2"></i>撤销</a>
-    <a (click)="redo()" class="fun-btn redo" href="javascript:;"><i class="iconfont icon-redo"></i>恢复</a>
-    <a (click)="renew()" class="fun-btn yuantu" href="javascript:;"><i class="iconfont icon-yuantu"></i>重做</a>
-    <a (click)="sharedData.hasLoaded&&(sharedData.curStage=(sharedData.curStage===0)?1:0)" class="fun-btn compare" href="javascript:;"><i class="iconfont icon-compare"></i>{{sharedData.curStage===0?'对比':'原图'}}</a>
-    <a (click)="saveFile()" class="fun-btn save" href="javascript:;"><i class="iconfont icon-save"></i>保存</a>
-</div>
+    <img data-qimager-elem="image" src="" alt="" draggable="false" style="display:none;">
+    <div class="logo">QImager</div>
+    <div class="function-btns">
+        <a (click)="openFile()" class="fun-btn open" href="javascript:;"><i class="iconfont icon-open"></i>打开图片</a>
+        <a (click)="doCrop()" class="fun-btn cut" href="javascript:;"><i class="iconfont icon-cut"></i>剪裁</a>
+        <a (click)="mirror()" class="fun-btn saveEffect" href="javascript:;"><i class="iconfont icon-jingxiang"></i>镜像</a>
+        <a (click)="undo()" class="fun-btn cancel" href="javascript:;"><i class="iconfont icon-cancel2"></i>撤销</a>
+        <a (click)="redo()" class="fun-btn redo" href="javascript:;"><i class="iconfont icon-redo"></i>恢复</a>
+        <a (click)="renew()" class="fun-btn yuantu" href="javascript:;"><i class="iconfont icon-yuantu"></i>重做</a>
+        <a (click)="sharedData.hasLoaded&&(sharedData.curStage=(sharedData.curStage===0)?1:0)" class="fun-btn compare" href="javascript:;"><i class="iconfont icon-compare"></i>{{sharedData.curStage===0?'对比':'原图'}}</a>
+        <a (click)="saveFile()" class="fun-btn save" href="javascript:;"><i class="iconfont icon-save"></i>保存</a>
+    </div>
 </div>
 <div class="cropper-modal" [ngStyle]="{display: cropperShow}">
     <img-cropper [image]="imageData" [settings]="cropperSettings" (onCrop)="onCrop($event)" ></img-cropper>
